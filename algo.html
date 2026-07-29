@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>算法学习笔记 — 竞赛算法模板与例题</title>
+<style>
+
+/* ===== CSS Variables — Hu Tao Theme ===== */
+/* Default: Light / White theme */
+:root {
+  --bg: #fdf6f0;
+  --bg-card: #fffaf5;
+  --bg-card-hover: #fef0e5;
+  --text: #3d2020;
+  --text-secondary: #8b5e3c;
+  --text-heading: #1a0a0a;
+  --border: #e8d5c8;
+  --code-bg: #fef5ed;
+  --code-text: #3d2020;
+  --accent: #c0392b;
+  --accent2: #b8860b;
+  --accent3: #e85d3a;
+  --gradient-1: linear-gradient(135deg, #c0392b, #b8860b);
+  --gradient-2: linear-gradient(135deg, #e85d3a, #d4a017);
+  --gradient-3: linear-gradient(135deg, #b8860b, #c0392b);
+  --gradient-4: linear-gradient(135deg, #c0392b, #e85d3a);
+  --gradient-fire: linear-gradient(180deg, #e85d3a, #d4a017, #e85d3a);
+  --shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --shadow-hover: 0 8px 40px rgba(192,57,43,0.15);
+  --radius: 12px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --butterfly-color-1: #c0392b;
+  --butterfly-color-2: #b8860b;
+}
+
+/* Hu Tao Dark Mode */
+[data-theme="dark"] {
+  --bg: #1a0a0a;
+  --bg-card: #241515;
+  --bg-card-hover: #2d1a1a;
+  --text: #e8d5c8;
+  --text-secondary: #b8957e;
+  --text-heading: #f5e6d8;
+  --accent: #e04444;
+  --accent2: #d4a017;
+  --accent3: #ff7b5a;
+  --border: #3d2020;
+  --code-bg: #0d0505;
+  --code-text: #e0c8b0;
+  --gradient-1: linear-gradient(135deg, #e04444, #d4a017);
+  --gradient-2: linear-gradient(135deg, #ff5e3a, #ff9a3c);
+  --gradient-3: linear-gradient(135deg, #d4a017, #e04444);
+  --gradient-4: linear-gradient(135deg, #c0392b, #e04444);
+  --gradient-fire: linear-gradient(180deg, #ff5e3a, #ff9a3c, #ff5e3a);
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-hover: 0 8px 40px rgba(224,68,68,0.2);
+  --butterfly-color-1: #e04444;
+  --butterfly-color-2: #d4a017;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; font-size: 16px; }
+body {
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  transition: background var(--transition), color var(--transition);
+  overflow-x: hidden;
+}
+
+/* ===== Scrollbar — Fire themed ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8b0000, #c0392b, #8b0000); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #c0392b, #e04444, #c0392b); }
+
+/* ===== Floating Particles ===== */
+#particles {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+}
+
+/* ===== Hu Tao Butterfly Decorations ===== */
+.butterfly-decor {
+  position: fixed; pointer-events: none; z-index: 0;
+  font-size: 2rem; opacity: 0.08;
+  animation: butterflyFloat 12s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+.butterfly-decor:nth-child(2) { animation-delay: -3s; animation-duration: 14s; }
+.butterfly-decor:nth-child(3) { animation-delay: -6s; animation-duration: 16s; }
+.butterfly-decor:nth-child(4) { animation-delay: -9s; animation-duration: 13s; }
+.butterfly-decor:nth-child(5) { animation-delay: -2s; animation-duration: 15s; }
+.butterfly-decor:nth-child(6) { animation-delay: -7s; animation-duration: 17s; }
+
+@keyframes butterflyFloat {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  15% { transform: translate(80px, -60px) rotate(8deg) scale(1.15); }
+  30% { transform: translate(160px, 20px) rotate(-5deg) scale(0.9); }
+  45% { transform: translate(60px, -100px) rotate(12deg) scale(1.1); }
+  60% { transform: translate(-40px, -40px) rotate(-8deg) scale(0.85); }
+  75% { transform: translate(-120px, -80px) rotate(6deg) scale(1.05); }
+  90% { transform: translate(20px, 30px) rotate(-3deg) scale(0.95); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+/* Ghostly glow under cards */
+.info-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(224,68,68,0.3), rgba(212,160,23,0.3), transparent);
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+.info-card:hover::after {
+  width: 80%;
+  background: linear-gradient(90deg, transparent, rgba(224,68,68,0.6), rgba(212,160,23,0.6), transparent);
+}
+
+/* Plum blossom accent for section headers */
+.section-header::before {
+  content: '🌸';
+  position: absolute; right: -10px; top: -15px;
+  font-size: 1.2rem; opacity: 0; pointer-events: none;
+  transition: all 0.6s ease;
+}
+.section-header {
+  position: relative;
+}
+.section-header:hover::before {
+  opacity: 0.6;
+}
+
+/* Butterfly trail on section icons */
+.section-header .icon {
+  position: relative;
+}
+.section-header .icon::after {
+  content: '🦋';
+  position: absolute; right: -8px; bottom: -8px;
+  font-size: 0.7rem; opacity: 0;
+  transition: all 0.4s ease;
+  transform: translateY(5px);
+}
+.section-header:hover .icon::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+  box-shadow: 0 1px 12px rgba(0,0,0,0.1);
+  transition: background var(--transition), border var(--transition);
+}
+.navbar .logo {
+  font-size: 1.3rem; font-weight: 800;
+  background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  filter: drop-shadow(0 0 8px rgba(224,68,68,0.3));
+}
+.nav-center { display: flex; align-items: center; gap: 8px; }
+.nav-link {
+  padding: 6px 16px; border-radius: 20px; text-decoration: none;
+  font-weight: 600; font-size: 0.85rem; color: var(--text-secondary);
+  border: 1px solid var(--border); transition: all var(--transition);
+}
+.nav-link:hover { border-color: var(--accent); color: var(--accent); }
+.nav-link.active { background: var(--gradient-1); color: #fff; border-color: transparent; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.theme-toggle {
+  width: 44px; height: 44px; border-radius: 22px; border: 2px solid var(--border);
+  background: var(--bg-card); color: var(--text); cursor: pointer; font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); transform: rotate(30deg); box-shadow: 0 0 20px rgba(224,68,68,0.3); }
+.search-box {
+  position: relative;
+}
+.search-box input {
+  padding: 8px 16px 8px 40px; border-radius: 24px; border: 2px solid var(--border);
+  background: var(--bg); color: var(--text); font-size: 0.9rem;
+  width: 200px; transition: all var(--transition); outline: none;
+}
+.search-box input:focus { width: 280px; border-color: var(--accent); }
+.search-box .search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--text-secondary); font-size: 0.9rem;
+}
+
+/* ===== Layout ===== */
+.container {
+  max-width: 1300px; margin: 0 auto; padding: 80px 24px 40px;
+  position: relative; z-index: 1;
+}
+
+/* ===== Hero ===== */
+.hero {
+  text-align: center; padding: 80px 20px 60px;
+  position: relative;
+}
+.hero h1 {
+  font-size: 3rem; font-weight: 900; letter-spacing: -1px;
+  background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  animation: fadeInUp 0.8s ease, titleGlow 3s ease-in-out infinite;
+}
+@keyframes titleGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(224,68,68,0.4)); }
+  50% { filter: drop-shadow(0 0 16px rgba(224,68,68,0.7)) drop-shadow(0 0 24px rgba(212,160,23,0.3)); }
+}
+.hero .subtitle {
+  font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 32px;
+  animation: fadeInUp 0.8s ease 0.15s both;
+}
+.hero-stats {
+  display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+.stat-item {
+  text-align: center;
+}
+.stat-number {
+  font-size: 2.5rem; font-weight: 900;
+  background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label { color: var(--text-secondary); font-size: 0.9rem; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* ===== Daily Problem ===== */
+.daily-section {
+  background: var(--bg-card); border: 2px solid var(--accent);
+  border-radius: var(--radius); padding: 28px 32px; margin-bottom: 32px;
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.daily-section::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+  background: linear-gradient(180deg, #c0392b, #d4a017);
+}
+.daily-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.daily-badge {
+  padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+  background: var(--gradient-1); color: #fff;
+  animation: dailypulse 2s ease-in-out infinite;
+}
+@keyframes dailypulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+.daily-title { font-size: 1.1rem; font-weight: 700; color: var(--text-heading); }
+.daily-info { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+.daily-info span { font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+.daily-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 20px; border-radius: 24px; background: var(--gradient-1);
+  color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem;
+  transition: all var(--transition);
+}
+.daily-link:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(192,57,43,0.4); }
+.daily-reroll {
+  padding: 8px 16px; border-radius: 24px; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-secondary); cursor: pointer;
+  font-size: 0.85rem; transition: all var(--transition);
+}
+.daily-reroll:hover { border-color: var(--accent); color: var(--accent); }
+/* Responsive daily */
+@media (max-width: 768px) {
+  .daily-section { padding: 20px; }
+}
+
+/* ===== Quick Nav Grid ===== */
+.quick-nav {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 48px;
+}
+.quick-nav a {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 16px; border-radius: var(--radius); border: 2px solid var(--border);
+  background: var(--bg-card); color: var(--text); text-decoration: none;
+  font-weight: 600; font-size: 0.9rem; transition: all var(--transition);
+  position: relative; overflow: hidden;
+}
+.quick-nav a::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, #c0392b, #e04444, #d4a017); opacity: 0; transition: opacity var(--transition); z-index: 0;
+}
+.quick-nav a:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: transparent; }
+.quick-nav a:hover::before { opacity: 1; }
+.quick-nav a:hover span { color: #fff; position: relative; z-index: 1; }
+.quick-nav .emoji { font-size: 1.3rem; position: relative; z-index: 1; }
+
+/* ===== Section ===== */
+.section {
+  margin-bottom: 48px;
+  scroll-margin-top: 80px;
+}
+.section-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+  padding-bottom: 16px; border-bottom: 2px solid var(--border);
+}
+.section-header .icon {
+  font-size: 2rem; width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card); border: 2px solid var(--border);
+  animation: float 3s ease-in-out infinite;
+}
+.section-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-heading); }
+.section-header .badge {
+  padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+  background: var(--gradient-1); color: #fff;
+}
+
+/* ===== Info Cards ===== */
+.info-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px; margin-bottom: 24px;
+}
+.info-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px;
+  box-shadow: var(--shadow); transition: all var(--transition);
+}
+.info-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+.info-card h4 {
+  font-size: 1rem; color: var(--accent); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ===== Complexity Table ===== */
+.complexity-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0 24px;
+  background: var(--bg-card); border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); font-size: 0.9rem;
+}
+.complexity-table thead { background: var(--gradient-1); }
+.complexity-table thead th {
+  padding: 14px 16px; color: #fff; font-weight: 700; text-align: left;
+}
+.complexity-table tbody td {
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+}
+.complexity-table tbody tr { transition: background var(--transition); }
+.complexity-table tbody tr:hover { background: var(--bg-card-hover); }
+.complexity-table .op { font-weight: 700; color: var(--accent2); font-family: 'Fira Code', 'Consolas', monospace; }
+.complexity-table .comp { font-family: 'Fira Code', 'Consolas', monospace; color: var(--accent3); font-weight: 600; }
+
+/* ===== Code Block ===== */
+.code-wrapper {
+  position: relative; margin: 16px 0 24px;
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; background: #1a0c0c;
+  border-bottom: 1px solid var(--border);
+}
+.code-header .lang { color: var(--accent); font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
+.copy-btn {
+  padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-secondary); cursor: pointer;
+  font-size: 0.8rem; transition: all var(--transition);
+  display: flex; align-items: center; gap: 6px;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+.copy-btn.copied { border-color: #34d399; color: #34d399; }
+.code-block {
+  background: var(--code-bg); padding: 20px; overflow-x: auto;
+  font-family: 'Fira Code', 'Cascadia Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.85rem; line-height: 1.7; color: var(--code-text);
+  white-space: pre; tab-size: 2;
+}
+
+/* ===== Problem Cards ===== */
+.problems-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px; margin: 20px 0;
+}
+.problem-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  transition: all var(--transition);
+  cursor: pointer; position: relative; overflow: hidden;
+}
+.problem-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: #e04444; }
+.problem-card .source {
+  display: inline-block; padding: 3px 10px; border-radius: 12px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.source-luogu { background: #fef3c7; color: #92400e; }
+.source-cf { background: #fce7f3; color: #9d174d; }
+.source-atc { background: #dbeafe; color: #1e40af; }
+.source-other { background: #d1fae5; color: #065f46; }
+.problem-card h5 { margin: 10px 0 6px; font-size: 1rem; color: var(--text-heading); }
+.problem-card .desc { color: var(--text-secondary); font-size: 0.85rem; }
+.problem-card .link-icon {
+  position: absolute; bottom: 16px; right: 16px; opacity: 0;
+  transition: all var(--transition);
+  color: var(--accent);
+}
+.problem-card:hover .link-icon { opacity: 1; }
+
+/* ===== Tips ===== */
+.tip-box {
+  border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px; margin: 20px 0;
+  background: var(--bg-card); color: var(--text);
+}
+.tip-box.warning { border-color: #d4a017; }
+.tip-box.success { border-color: #c0392b; }
+.tip-box strong { color: var(--accent); }
+.tip-box.warning strong { color: #d4a017; }
+.tip-box.success strong { color: #e04444; }
+
+/* ===== Collapsible ===== */
+.collapsible {
+  margin: 16px 0;
+}
+.collapsible-trigger {
+  width: 100%; padding: 16px 20px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--bg-card);
+  color: var(--text-heading); font-size: 1rem; font-weight: 700;
+  cursor: pointer; text-align: left; display: flex; align-items: center;
+  justify-content: space-between; transition: all var(--transition);
+}
+.collapsible-trigger:hover { border-color: #e04444; background: var(--bg-card-hover); }
+.collapsible-trigger .arrow {
+  transition: transform var(--transition); font-size: 0.8rem;
+}
+.collapsible-trigger.open .arrow { transform: rotate(180deg); }
+.collapsible-content {
+  max-height: 0; overflow: hidden; transition: max-height 0.5s ease;
+  padding: 0 20px;
+}
+.collapsible-content.open { max-height: 2000px; padding: 20px; }
+
+/* ===== TOC Sidebar ===== */
+.toc-sidebar {
+  position: fixed; right: 24px; top: 50%; transform: translateY(-50%);
+  z-index: 999; display: none;
+}
+@media (min-width: 1400px) {
+  .toc-sidebar { display: block; }
+}
+.toc-dot {
+  display: block; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--border); margin: 12px 0;
+  transition: all var(--transition); cursor: pointer;
+  position: relative;
+}
+.toc-dot:hover, .toc-dot.active { background: var(--accent); transform: scale(1.5); }
+.toc-dot .toc-tooltip {
+  position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+  background: var(--bg-card); color: var(--text); padding: 4px 12px;
+  border-radius: 6px; font-size: 0.75rem; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity var(--transition);
+  border: 1px solid var(--border);
+}
+.toc-dot:hover .toc-tooltip { opacity: 1; }
+
+/* ===== Scroll Progress Bar — Hu Tao Fire ===== */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, #8b0000, #e04444, #d4a017, #ff5e3a);
+  z-index: 1001; transition: width 0.1s linear;
+  box-shadow: 0 0 12px rgba(224,68,68,0.5), 0 0 24px rgba(255,94,58,0.3);
+}
+
+/* ===== Back to Top — Hu Tao Ghost ===== */
+.back-to-top {
+  position: fixed; bottom: 32px; right: 32px; z-index: 999;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, #c0392b, #e04444); color: #fff; border: none;
+  font-size: 1.3rem; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(224,68,68,0.5), 0 0 30px rgba(255,94,58,0.2);
+  opacity: 0; transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top:hover { transform: translateY(-4px) scale(1.08); box-shadow: 0 8px 35px rgba(224,68,68,0.7), 0 0 50px rgba(255,94,58,0.35); }
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center; padding: 40px; color: var(--text-secondary);
+  border-top: 1px solid var(--border); margin-top: 40px;
+}
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  padding: 12px 24px; border-radius: 24px;
+  background: linear-gradient(135deg, #c0392b, #e04444); color: #fff; font-weight: 600;
+  z-index: 9999; animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
+  box-shadow: 0 4px 20px rgba(224,68,68,0.4);
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* ===== Hu Tao Q-version Mascot ===== */
+.hutao-mascot {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 998;
+  width: 90px;
+  height: 90px;
+  cursor: pointer;
+  animation: mascotFloat 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.hutao-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 18px;
+  /* Soft edge glow */
+  box-shadow: 0 0 15px rgba(224,68,68,0.25);
+}
+.hutao-mascot:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 6px 24px rgba(224,68,68,0.55));
+  animation-play-state: paused;
+  z-index: 1000;
+}
+.hutao-mascot:active {
+  transform: scale(0.9);
+}
+
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(1deg); }
+  50% { transform: translateY(-3px) rotate(0deg); }
+  75% { transform: translateY(-7px) rotate(-1deg); }
+}
+
+/* Ghost buddy floating beside mascot */
+.ht-ghost-buddy {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  font-size: 1.4rem;
+  animation: ghostFloat 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(180,180,240,0.6));
+  z-index: 10;
+  pointer-events: none;
+}
+@keyframes ghostFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-10px) rotate(-6deg); }
+  60% { transform: translateY(-3px) rotate(3deg); }
+  85% { transform: translateY(-12px) rotate(-4deg); }
+}
+
+/* Hide on very small screens */
+@media (max-width: 640px) {
+  .hutao-mascot, .ht-ghost-buddy { display: none; }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .hero-stats { gap: 20px; }
+  .stat-number { font-size: 1.8rem; }
+  .quick-nav { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+  .search-box input { width: 140px; }
+  .search-box input:focus { width: 180px; }
+  .info-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">👻</button>
+<canvas id="particles"></canvas>
+
+<div class="butterfly-decor" style="top:12%;left:8%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:25%;right:10%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:50%;left:5%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:65%;right:6%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:80%;left:12%;" aria-hidden="true">👻</div>
+<div class="butterfly-decor" style="top:35%;left:90%;" aria-hidden="true">🌸</div>
+
+<div class="hutao-mascot" id="hutaoMascot" title="往生堂第七十七代堂主 — 胡桃 🦋">
+  <img src="hutao.jpg" alt="胡桃 Q版" class="hutao-img">
+  <div class="ht-ghost-buddy">👻</div>
+</div>
+
+<nav class="navbar">
+  <a class="logo" href="algo.html" style="text-decoration:none;">🦋 算法学习笔记</a>
+  <div class="nav-center" style="display:flex;align-items:center;gap:8px;">
+    <a class="nav-link" href="home.html" style="padding:6px 16px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.85rem;color:var(--text-secondary);border:1px solid var(--border);transition:all var(--transition);" onmouseenter="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">🏠 主页</a>
+    <a class="nav-link" href="index.html" style="padding:6px 16px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.85rem;color:var(--text-secondary);border:1px solid var(--border);transition:all var(--transition);" onmouseenter="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">📦 STL 容器</a>
+    <a class="nav-link active" href="algo.html" style="padding:6px 16px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.85rem;color:#fff;background:var(--gradient-1);">📖 算法笔记</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">🔥</button>
+  </div>
+</nav>
+
+<nav class="toc-sidebar" id="tocSidebar"></nav>
+
+<main class="container">
+
+<section class="hero">
+  <h1>📖 算法学习笔记</h1>
+  <p class="subtitle">从零开始学算法 — 常用模板、经典例题、每日一题</p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-number">12</div><div class="stat-label">算法专题</div></div>
+    <div class="stat-item"><div class="stat-number">50+</div><div class="stat-label">经典例题</div></div>
+    <div class="stat-item"><div class="stat-number">O(·)</div><div class="stat-label">复杂度分析</div></div>
+  </div>
+</section>
+
+    <section class="daily-section" id="dailySection" style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:28px 32px;margin-bottom:32px;box-shadow:var(--shadow);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,#c0392b,#d4a017);"></div>
+      <div class="daily-header" style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+        <span class="daily-badge" style="padding:4px 14px;border-radius:20px;font-size:0.75rem;font-weight:700;background:var(--gradient-1);color:#fff;animation:dailypulse 2s ease-in-out infinite;">📅 每日一题</span>
+        <span style="font-size:1.1rem;font-weight:700;color:var(--text-heading);" id="dailyTitle">加载中...</span>
+      </div>
+      <div class="daily-info" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="font-size:0.85rem;color:var(--text-secondary);">📊 <strong id="dailyDiff">—</strong></span>
+        <span style="font-size:0.85rem;color:var(--text-secondary);">📍 <strong id="dailySource">—</strong></span>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:12px;" id="dailyDesc"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="daily-link" id="dailyLink" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:24px;background:var(--gradient-1);color:#fff;text-decoration:none;font-weight:700;font-size:0.9rem;transition:all var(--transition);">🔗 去刷题 →</a>
+        <button class="daily-reroll" onclick="pickDailyProblem()" style="padding:8px 16px;border-radius:24px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:0.85rem;transition:all var(--transition);">🎲 换一题</button>
+      </div>
+    </section>
+
+<div class="quick-nav" id="quickNav">
+              <a href="#sort"><span class="emoji">🔢</span><span>排序算法</span></a>
+              <a href="#binsearch"><span class="emoji">🔍</span><span>二分查找 & 二分答案</span></a>
+              <a href="#prefix"><span class="emoji">📐</span><span>前缀和 & 差分</span></a>
+              <a href="#twoptr"><span class="emoji">👆</span><span>双指针 & 滑动窗口</span></a>
+              <a href="#math"><span class="emoji">🔢</span><span>基础数论</span></a>
+              <a href="#greedy"><span class="emoji">💡</span><span>贪心算法</span></a>
+              <a href="#search"><span class="emoji">🌐</span><span>DFS & BFS — 搜索</span></a>
+              <a href="#dp"><span class="emoji">🧩</span><span>动态规划 (DP)</span></a>
+              <a href="#knapsack"><span class="emoji">🎒</span><span>背包问题</span></a>
+              <a href="#dsu"><span class="emoji">🔗</span><span>并查集 (DSU)</span></a>
+              <a href="#sp"><span class="emoji">🛣️</span><span>最短路</span></a>
+              <a href="#string"><span class="emoji">📝</span><span>字符串算法</span></a>
+</div>
+
+    <section class="section" id="sort" data-container>
+      <div class="section-header">
+        <div class="icon">🔢</div>
+        <div><h2>排序算法</h2></div>
+        <span class="badge">Sorting</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 为什么学排序？</h4><p>数据<strong>有序</strong>后查找只需 O(log n)。排序是二分、去重、贪心等几乎所有操作的前提。竞赛中直接用 <code>sort()</code>，手写主要用于理解分治思想和统计逆序对。</p></div>
+            <div class="info-card"><h4>📖 核心思想</h4><p><strong>快速排序</strong>：选 pivot，小的放左大的放右，递归处理。<strong>归并排序</strong>：分半递归排好再合并，合并时可<em>顺手统计逆序对</em>——这是竞赛高频考点。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">sort(begin,end)</td><td class="comp">O(n log n)</td><td>Introsort 混合排序，不会退化到 O(n²)</td></tr><tr><td class="op">手写快排</td><td class="comp">O(n log n) 均摊</td><td>最坏 O(n²)，但 std::sort() 不会</td></tr><tr><td class="op">归并排序</td><td class="comp">O(n log n)</td><td>稳定排序，可求逆序对，需 O(n) 辅助空间</td></tr><tr><td class="op">逆序对统计</td><td class="comp">O(n log n)</td><td>归并过程中顺便统计：cnt+=mid-i+1</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// 快速排序
+void quickSort(vector<int>&a,int l,int r){
+  if(l>=r)return;int i=l-1,j=r+1,p=a[(l+r)>>1];
+  while(i<j){do i++;while(a[i]<p);do j--;while(a[j]>p);if(i<j)swap(a[i],a[j]);}
+  quickSort(a,l,j);quickSort(a,j+1,r);
+}
+
+// 归并排序 + 统计逆序对
+typedef long long ll;
+ll mergeSort(vector<int>&a,int l,int r){
+  if(l>=r)return 0;int m=(l+r)>>1;
+  ll cnt=mergeSort(a,l,m)+mergeSort(a,m+1,r);
+  vector<int>t(r-l+1);int i=l,j=m+1,k=0;
+  while(i<=m&&j<=r){
+    if(a[i]<=a[j])t[k++]=a[i++];
+    else{cnt+=m-i+1;t[k++]=a[j++];}
+  }
+  while(i<=m)t[k++]=a[i++];while(j<=r)t[k++]=a[j++];
+  for(i=0;i<k;i++)a[l+i]=t[i];return cnt;
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 日常直接用 <code>sort(a.begin(), a.end())</code> 即可。只有需要统计<strong>逆序对</strong>时才手写归并排序。C++17 后可以用 <code>stable_sort()</code> 做稳定排序。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1177" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1177 【模板】排序</h5>
+                  <p class="desc">直接使用 sort() 完成排序</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1059" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1059 [NOIP2006] 明明的随机数</h5>
+                  <p class="desc">排序 + 去重：sort + unique + erase</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1908" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1908 逆序对</h5>
+                  <p class="desc">归并排序求逆序对，经典分治应用</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1923" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1923 【深基9.例4】求第 k 小的数</h5>
+                  <p class="desc">快速选择 / nth_element，O(n)</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://codeforces.com/problemset/problem/160/A" target="_blank" rel="noopener">
+                  <span class="source source-cf">Codeforces</span>
+                  <h5>160A Twins</h5>
+                  <p class="desc">排序 + 贪心，算法入门练习</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="binsearch" data-container>
+      <div class="section-header">
+        <div class="icon">🔍</div>
+        <div><h2>二分查找 & 二分答案</h2></div>
+        <span class="badge">Binary Search</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 为什么需要二分？</h4><p>在<strong>有序</strong>序列中找东西，每次砍掉一半搜索范围，O(log n)。n=10⁹ 只需约 30 次比较。<strong>二分答案</strong>：当问题有单调性时，对答案值域二分，把"求最优解"变成"判断可行性"。</p></div>
+            <div class="info-card"><h4>📖 边界处理与死循环陷阱</h4><p>整数二分最易出错的是<strong>死循环</strong>。记住口诀：<code>r=mid</code> 用下取整 <code>(l+r)/2</code>，<code>l=mid</code> 必须上取整 <code>(l+r+1)/2</code>。最安全的方法是用 <code>ans</code> 变量单独记录可行解。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">lower_bound()</td><td class="comp">O(log n)</td><td>找第一个 ≥x 的位置</td></tr><tr><td class="op">upper_bound()</td><td class="comp">O(log n)</td><td>找第一个 >x 的位置</td></tr><tr><td class="op">binary_search()</td><td class="comp">O(log n)</td><td>判断元素是否存在于有序序列</td></tr><tr><td class="op">二分答案 + check()</td><td class="comp">O(log 值域 × check)</td><td>答案满足单调性时使用</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// 二分查找：第一个 ≥x 的位置 (lower_bound)
+int lowerBound(vector<int>&a,int x){
+  int l=0,r=a.size();
+  while(l<r){int m=l+(r-l)/2;if(a[m]>=x)r=m;else l=m+1;}
+  return l;
+}
+
+// 二分答案模板（l=mid 时上取整！）
+ll l=0,r=1e18;
+while(l<r){
+  ll m=l+(r-l+1)/2;  // ← 上取整，防止死循环
+  if(check(m))l=m;else r=m-1;
+}
+// 答案 = l</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>⚠️ 死循环口诀：</strong> r=mid → 下取整 (l+r)/2；l=mid → 上取整 (l+r+1)/2。不放心就用 ans 变量记录可行解，百分百不出错。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P2249" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P2249 【深基13.例1】查找</h5>
+                  <p class="desc">二分查找模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1873" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1873 [COCI] 砍树</h5>
+                  <p class="desc">二分答案入门，理解 check 函数</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P2678" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P2678 [NOIP2015] 跳石头</h5>
+                  <p class="desc">二分答案经典题，"最大值最小化"</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P2440" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P2440 木材加工</h5>
+                  <p class="desc">二分答案练习</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://ac.nowcoder.com/acm/problem/24866" target="_blank" rel="noopener">
+                  <span class="source source-niuke">牛客</span>
+                  <h5>NC24866 完全平方数</h5>
+                  <p class="desc">二分查找应用，中等难度</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="prefix" data-container>
+      <div class="section-header">
+        <div class="icon">📐</div>
+        <div><h2>前缀和 & 差分</h2></div>
+        <span class="badge">Prefix Sum</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 解决什么问题？</h4><p>反复查询区间和→每次 O(n) 太慢。<strong>前缀和</strong>一次 O(n) 预处理，每次查询 O(1)。反过来，反复做区间加法→<strong>差分</strong> O(1) 标记两个端点，最后统一 O(n) 还原。两者互为逆运算。</p></div>
+            <div class="info-card"><h4>📖 核心公式</h4><p><strong>一维前缀和</strong>：pref[i] = 前 i 项和，sum[l,r] = pref[r+1]-pref[l]。<strong>二维</strong>：容斥原理，矩形和 = 大矩形 - 上 - 左 + 左上。<strong>差分</strong>：diff[l]+=x, diff[r+1]-=x。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">一维前缀和</td><td class="comp">O(n) 预处理 / O(1) 查询</td><td>sum[l..r] = pref[r+1] - pref[l]</td></tr><tr><td class="op">二维前缀和</td><td class="comp">O(nm) 预处理 / O(1) 查询</td><td>矩阵和 = 容斥原理</td></tr><tr><td class="op">一维差分</td><td class="comp">O(1) 修改 / O(n) 还原</td><td>区间[l,r]+x 只需改两个端点</td></tr><tr><td class="op">二维差分</td><td class="comp">O(1) 修改 / O(nm) 还原</td><td>矩阵区域统一加减</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// 一维前缀和
+vector<int>pref(n+1);
+for(int i=0;i<n;i++)pref[i+1]=pref[i]+a[i];
+int sum=pref[r+1]-pref[l]; // O(1) 查询 [l,r]
+
+// 二维前缀和
+pref[i][j]=a[i][j]+pref[i-1][j]+pref[i][j-1]-pref[i-1][j-1];
+int s=pref[x2][y2]-pref[x1-1][y2]-pref[x2][y1-1]+pref[x1-1][y1-1];
+
+// 差分：区间 [l,r] 所有数 +x
+diff[l]+=x;diff[r+1]-=x;
+for(int i=1;i<n;i++)diff[i]+=diff[i-1]; // 前缀和还原</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 差分数组多开一位 <code>n+2</code> 防止 r+1 越界。前缀和配合哈希表可以解决<strong>子数组和为 K</strong> 的经典问题。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P8218" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P8218 【深进1.例1】求区间和</h5>
+                  <p class="desc">前缀和模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P2367" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P2367 语文成绩</h5>
+                  <p class="desc">差分模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1719" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1719 最大加权矩形</h5>
+                  <p class="desc">二维前缀和 + 最大子矩阵</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P3397" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P3397 地毯</h5>
+                  <p class="desc">二维差分模板</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://ac.nowcoder.com/acm/problem/207053" target="_blank" rel="noopener">
+                  <span class="source source-niuke">牛客</span>
+                  <h5>NC207053 二维差分</h5>
+                  <p class="desc">二维差分应用</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="twoptr" data-container>
+      <div class="section-header">
+        <div class="icon">👆</div>
+        <div><h2>双指针 & 滑动窗口</h2></div>
+        <span class="badge">Two Pointers</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 为什么需要双指针？</h4><p>很多问题暴力是 O(n²) 两层循环。但若发现<strong>指针只进不退</strong>，可用双指针优化到 O(n)——每个元素最多被左右指针各访问一次。</p></div>
+            <div class="info-card"><h4>📖 三种经典模式</h4><p><strong>对撞指针</strong>：两端往中间走（有序数组两数之和）。<strong>快慢指针</strong>：一快一慢去重。<strong>滑动窗口</strong>：维护 [l,r] 可变窗口，右扩满足条件，左缩打破条件。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">滑动窗口</td><td class="comp">O(n)</td><td>右指针扩张 + 左指针收缩</td></tr><tr><td class="op">对撞指针</td><td class="comp">O(n)</td><td>有序数组的两端向中间移动</td></tr><tr><td class="op">快慢指针</td><td class="comp">O(n)</td><td>数组原地去重、链表判环</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// 滑动窗口：最长无重复字符子串 O(n)
+int longestNoRepeat(string s){
+  vector<int>c(256);int l=0,ans=0;
+  for(int r=0;r<s.size();r++){
+    c[s[r]]++;while(c[s[r]]>1)c[s[l++]]--;
+    ans=max(ans,r-l+1);
+  }
+  return ans;
+}
+
+// 对撞指针：有序数组两数之和
+int l=0,r=a.size()-1;
+while(l<r){
+  int s=a[l]+a[r];
+  if(s==target)return{l,r};
+  s<target?l++:r--;
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 滑动窗口的精髓：右指针负责扩张，左指针负责收缩。每个元素最多被加入一次、删除一次 = O(n)。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1638" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1638 逛画展</h5>
+                  <p class="desc">滑动窗口模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1102" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1102 A-B 数对</h5>
+                  <p class="desc">双指针 / 哈希表计数</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1147" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1147 连续自然数和</h5>
+                  <p class="desc">滑动窗口求连续和</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://codeforces.com/problemset/problem/279/B" target="_blank" rel="noopener">
+                  <span class="source source-cf">Codeforces</span>
+                  <h5>279B Books</h5>
+                  <p class="desc">经典滑动窗口，入门必做</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="math" data-container>
+      <div class="section-header">
+        <div class="icon">🔢</div>
+        <div><h2>基础数论</h2></div>
+        <span class="badge">Number Theory</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 解决什么问题？</h4><p><strong>GCD/LCM</strong>：约分、判断互质。<strong>快速幂</strong>：a^n mod m 从 O(n) 优化到 O(log n)。<strong>素数筛</strong>：预处理 [1,n] 内所有素数。竞赛中数论题很常见，掌握基础就能解决不少问题。</p></div>
+            <div class="info-card"><h4>📖 核心公式与原理</h4><p><strong>欧几里得</strong>：gcd(a,b)=gcd(b,a%b)，直到 b=0。<strong>快速幂</strong>：二进制拆分指数，n 的二进制有 log₂n 位。关键是 <code>if(n&1)res=res*a%mod</code> 和 <code>a=a*a%mod</code>。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">gcd(a,b)</td><td class="comp">O(log min(a,b))</td><td>辗转相除法</td></tr><tr><td class="op">lcm(a,b)</td><td class="comp">O(log min(a,b))</td><td>a/gcd(a,b)*b，先除后乘防溢出</td></tr><tr><td class="op">快速幂 a^n mod m</td><td class="comp">O(log n)</td><td>二进制拆分指数</td></tr><tr><td class="op">欧拉筛</td><td class="comp">O(n)</td><td>每个合数只被最小质因子筛掉</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">int gcd(int a,int b){return b?gcd(b,a%b):a;}
+int lcm(int a,int b){return a/gcd(a,b)*b;}
+
+// 快速幂 a^n % mod — O(log n)
+typedef long long ll;
+ll qpow(ll a,ll n,ll mod){
+  ll res=1;
+  while(n){if(n&1)res=res*a%mod;a=a*a%mod;n>>=1;}
+  return res;
+}
+
+// 欧拉筛（线性筛）O(n)
+const int N=1e7+5;vector<int>pr;bool st[N];
+for(int i=2;i<=n;i++){
+  if(!st[i])pr.push_back(i);
+  for(int p:pr){if(i*p>n)break;st[i*p]=true;if(i%p==0)break;}
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 欧拉筛中 <code>if(i%p==0)break</code> 是关键——保证每个合数只被筛一次。C++17 起可以直接用 <code>std::gcd()</code> 和 <code>std::lcm()</code>。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1029" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1029 [NOIP2001] GCD和LCM问题</h5>
+                  <p class="desc">最大公约数与最小公倍数</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1226" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1226 【模板】快速幂</h5>
+                  <p class="desc">快速幂模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P3383" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P3383 【模板】线性筛素数</h5>
+                  <p class="desc">欧拉筛模板</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1082" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1082 [NOIP2012] 同余方程</h5>
+                  <p class="desc">扩展欧几里得求逆元，中等难度</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="greedy" data-container>
+      <div class="section-header">
+        <div class="icon">💡</div>
+        <div><h2>贪心算法</h2></div>
+        <span class="badge">Greedy</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 什么是贪心？</h4><p>每步都选<strong>当前看起来最好的选项</strong>，不回溯。不能保证所有问题的最优解，但在区间调度、哈夫曼编码等问题上可以<strong>证明</strong>是最优的。</p></div>
+            <div class="info-card"><h4>📖 经典模式与证明</h4><p><strong>区间调度</strong>：按结束时间排序，每次选最早结束的→用交换论证可证最优。<strong>哈夫曼树</strong>：每次合并最小的两堆→用小根堆维护。<strong>部分背包</strong>：按性价比排序。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">区间调度</td><td class="comp">O(n log n)</td><td>按结束时间排序，贪心选不冲突的</td></tr><tr><td class="op">哈夫曼编码</td><td class="comp">O(n log n)</td><td>小根堆每次取最小两堆合并</td></tr><tr><td class="op">部分背包</td><td class="comp">O(n log n)</td><td>按性价比（价值/重量）排序</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// 区间调度：选最多的不重叠区间
+sort(its.begin(),its.end(),
+  [](auto&a,auto&b){return a.second<b.second;});
+int cnt=0,last=-1e9;
+for(auto[l,r]:its)if(l>=last){cnt++;last=r;}
+
+// 合并果子（哈夫曼树）
+priority_queue<int,vector<int>,greater<int>>pq;
+for(int x:a)pq.push(x);int ans=0;
+while(pq.size()>1){
+  int a=pq.top();pq.pop();int b=pq.top();pq.pop();
+  ans+=a+b;pq.push(a+b);
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 贪心最难的是<strong>证明正确性</strong>。区间调度按结束时间排序是因为越早结束留给后面的时间越多。"选最早开始"或"选最短"都是错的。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1090" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1090 [NOIP2004] 合并果子</h5>
+                  <p class="desc">哈夫曼树，小根堆贪心</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1803" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1803 凌乱的yyy / 线段覆盖</h5>
+                  <p class="desc">区间调度模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P2240" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P2240 【深基12.例1】部分背包</h5>
+                  <p class="desc">性价比贪心</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P5019" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P5019 [NOIP2018] 铺设道路</h5>
+                  <p class="desc">差分贪心，NOIP 真题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="search" data-container>
+      <div class="section-header">
+        <div class="icon">🌐</div>
+        <div><h2>DFS & BFS — 搜索</h2></div>
+        <span class="badge">Graph Search</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 解决什么问题？</h4><p>图/树遍历、找所有可能解、找最短路径。<strong>DFS</strong> 用递归/栈一条路走到底再回溯。<strong>BFS</strong> 用队列一层层扩展，<strong>第一次到达即最短路</strong>（边权=1时）。</p></div>
+            <div class="info-card"><h4>📖 回溯法的关键</h4><p>DFS 回溯三步：<strong>做选择 → 递归 → 撤销选择</strong>。必须恢复现场（used 数组和 path 都要撤销），否则影响兄弟分支。全排列、八皇后是最经典的回溯题。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">DFS 递归遍历</td><td class="comp">O(V+E)</td><td>连通分量、树形DP、回溯</td></tr><tr><td class="op">DFS 回溯（全排列）</td><td class="comp">O(n!)</td><td>指数级，注意剪枝优化</td></tr><tr><td class="op">BFS 最短路</td><td class="comp">O(V+E)</td><td>边权=1 时首次访问即最短路</td></tr><tr><td class="op">BFS 层序遍历</td><td class="comp">O(V+E)</td><td>队列实现，逐层扩展</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// DFS 回溯：全排列
+vector<int>path;vector<bool>used(n);
+function<void()>dfs=[&](){
+  if(path.size()==n){/*找到解*/return;}
+  for(int i=0;i<n;i++){
+    if(used[i])continue;
+    used[i]=true;path.push_back(a[i]);
+    dfs();
+    path.pop_back();used[i]=false; // 回溯！
+  }
+};
+
+// BFS 最短路（边权=1）
+vector<int>dist(n,-1);queue<int>q;
+dist[s]=0;q.push(s);
+while(!q.empty()){
+  int u=q.front();q.pop();
+  for(int v:g[u])if(dist[v]==-1){
+    dist[v]=dist[u]+1;q.push(v);
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>⚠️ 回溯关键：</strong> 一定要<strong>恢复现场</strong>！选了就要撤销。DFS 递归太深会爆栈（>10⁵层），大图用迭代栈或改用 BFS。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1706" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1706 全排列问题</h5>
+                  <p class="desc">DFS 回溯入门</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1605" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1605 迷宫</h5>
+                  <p class="desc">DFS 计数所有路径</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1443" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1443 马的遍历</h5>
+                  <p class="desc">BFS 模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1219" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1219 [USACO1.5] 八皇后</h5>
+                  <p class="desc">DFS 回溯经典</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1135" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1135 奇怪的电梯</h5>
+                  <p class="desc">BFS 求最短步数</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="dp" data-container>
+      <div class="section-header">
+        <div class="icon">🧩</div>
+        <div><h2>动态规划 (DP)</h2></div>
+        <span class="badge">DP</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 什么是 DP？</h4><p>把大问题拆成<strong>重叠的子问题</strong>，用数组记住子问题答案避免重复计算。本质是<strong>空间换时间</strong>。斐波那契 f[n]=f[n-1]+f[n-2] 就是最简单的 DP。</p></div>
+            <div class="info-card"><h4>📖 DP 五步法</h4><p>① <strong>定义状态</strong>：dp[i] 表示什么？② <strong>转移方程</strong>：怎么从前面推出来？③ <strong>初始化</strong>：边界值。④ <strong>遍历顺序</strong>：从小到大还是倒序？⑤ <strong>返回答案</strong>：dp[n]？max(dp)？</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">最大子段和</td><td class="comp">O(n)</td><td>dp[i]=max(dp[i-1]+a[i],a[i])</td></tr><tr><td class="op">最长上升子序列 LIS</td><td class="comp">O(n²) / O(n log n)</td><td>可贪心+二分优化到 O(n log n)</td></tr><tr><td class="op">最长公共子序列 LCS</td><td class="comp">O(nm)</td><td>排列 LCS 可转 LIS 优化</td></tr><tr><td class="op">编辑距离</td><td class="comp">O(nm)</td><td>增/删/改三种操作的最小次数</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// 最大子段和 — 最简单的 DP
+int cur=0,ans=INT_MIN;
+for(int x:a){cur=max(cur+x,x);ans=max(ans,cur);}
+
+// 最长上升子序列 LIS O(n²)
+vector<int>dp(n,1);
+for(int i=0;i<n;i++)for(int j=0;j<i;j++)
+  if(a[j]<a[i])dp[i]=max(dp[i],dp[j]+1);
+
+// 最长公共子序列 LCS O(nm)
+for(int i=1;i<=n;i++)for(int j=1;j<=m;j++)
+  if(s[i-1]==t[j-1])dp[i][j]=dp[i-1][j-1]+1;
+  else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 入门建议：</strong> DP 没有捷径，从最简单的"最大子段和""爬楼梯"开始，慢慢感受"状态"和"转移"的含义。核心是<strong>想清楚 dp[i] 到底表示什么</strong>。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1115" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1115 最大子段和</h5>
+                  <p class="desc">DP 入门必做</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1020" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1020 [NOIP1999] 导弹拦截</h5>
+                  <p class="desc">LIS + Dilworth 定理</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1091" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1091 [NOIP2004] 合唱队形</h5>
+                  <p class="desc">双向 LIS，经典题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1439" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1439 【模板】最长公共子序列</h5>
+                  <p class="desc">排列 LCS→LIS 优化</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P2758" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P2758 编辑距离</h5>
+                  <p class="desc">经典字符串 DP</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="knapsack" data-container>
+      <div class="section-header">
+        <div class="icon">🎒</div>
+        <div><h2>背包问题</h2></div>
+        <span class="badge">Knapsack DP</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 什么是背包问题？</h4><p>容量 W 的背包，N 件物品各重 w[i] 价值 v[i]，选一些使总价值最大。<strong>01背包</strong>：每件最多一次。<strong>完全背包</strong>：每件无限次。<strong>多重背包</strong>：每件限定次数。</p></div>
+            <div class="info-card"><h4>📖 一维优化的核心</h4><p>01背包 j <strong>倒序</strong>（确保用的是上一轮状态，每件最多一次）。完全背包 j <strong>正序</strong>（允许同件被多次选取）。多重背包<strong>二进制拆分</strong>后做01背包。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">01背包</td><td class="comp">O(nW)</td><td>j 倒序，每件最多选一次</td></tr><tr><td class="op">完全背包</td><td class="comp">O(nW)</td><td>j 正序，每件无限次</td></tr><tr><td class="op">多重背包</td><td class="comp">O(W·Σlog cnt)</td><td>二进制拆分 + 01背包</td></tr><tr><td class="op">分组背包</td><td class="comp">O(nW)</td><td>每组最多选一件</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">vector<int>dp(W+1);
+// 01背包：j 倒序
+for(int i=0;i<n;i++)
+  for(int j=W;j>=w[i];j--)
+    dp[j]=max(dp[j],dp[j-w[i]]+v[i]);
+
+// 完全背包：j 正序
+for(int i=0;i<n;i++)
+  for(int j=w[i];j<=W;j++)
+    dp[j]=max(dp[j],dp[j-w[i]]+v[i]);
+
+// 多重背包：二进制拆分 + 01背包
+vector<pair<int,int>>items;
+for(int i=0;i<n;i++){int k=cnt[i];
+  for(int p=1;p<=k;p<<=1){
+    items.push_back({w[i]*p,v[i]*p});k-=p;}
+  if(k)items.push_back({w[i]*k,v[i]*k});
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 口诀：</strong> 01背包<strong>倒着走</strong>（j--），完全背包<strong>正着走</strong>（j++），多重背包<strong>二进制拆</strong>。想不明白就画二维表看状态来源。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1048" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1048 [NOIP2005] 采药</h5>
+                  <p class="desc">01背包模板，经典入门</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1616" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1616 疯狂的采药</h5>
+                  <p class="desc">完全背包模板</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1776" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1776 宝物筛选</h5>
+                  <p class="desc">多重背包 + 二进制优化</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1164" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1164 小A点菜</h5>
+                  <p class="desc">01背包方案数统计</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="dsu" data-container>
+      <div class="section-header">
+        <div class="icon">🔗</div>
+        <div><h2>并查集 (DSU)</h2></div>
+        <span class="badge">Union-Find</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 解决什么问题？</h4><p>动态维护<strong>集合的合并与查询</strong>："两个元素在同一集合吗？""合并这两个集合"。暴力 O(n)，并查集<strong>近乎 O(1)</strong>——路径压缩+按秩合并后均摊≈O(α(n))≈常数。</p></div>
+            <div class="info-card"><h4>📖 两大优化</h4><p><strong>路径压缩</strong>：find 时把路径上所有节点直接指向根。<strong>按秩合并</strong>：小树并入大树，保持树高 O(log n)。Kruskal 最小生成树的核心组件。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">find(x)</td><td class="comp">O(α(n)) ≈ O(1)</td><td>找根 + 路径压缩</td></tr><tr><td class="op">unite(x,y)</td><td class="comp">O(α(n)) ≈ O(1)</td><td>合并两集合，按秩合并</td></tr><tr><td class="op">same(x,y)</td><td class="comp">O(α(n)) ≈ O(1)</td><td>判断是否同集合</td></tr><tr><td class="op">扩展域 DSU</td><td class="comp">O(α(n))</td><td>处理朋友/敌人关系</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">struct DSU{
+  vector<int>fa,sz;
+  DSU(int n):fa(n+1),sz(n+1,1){
+    iota(fa.begin(),fa.end(),0);
+  }
+  int find(int x){return fa[x]==x?x:fa[x]=find(fa[x]);}
+  bool unite(int x,int y){
+    x=find(x),y=find(y);
+    if(x==y)return false;
+    if(sz[x]<sz[y])swap(x,y);
+    fa[y]=x;sz[x]+=sz[y];return true;
+  }
+  bool same(int x,int y){return find(x)==find(y);}
+  int size(int x){return sz[find(x)];}
+};</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 并查集是 Kruskal 最小生成树的基础。扩展域并查集（x 和 x+n 表示对立关系）可以解决"关押罪犯"等经典问题。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P3367" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P3367 【模板】并查集</h5>
+                  <p class="desc">DSU 模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1111" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1111 修复公路</h5>
+                  <p class="desc">DSU + 排序，判断连通时间</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1525" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1525 [NOIP2010] 关押罪犯</h5>
+                  <p class="desc">扩展域并查集经典</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1196" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1196 [NOI2002] 银河英雄传说</h5>
+                  <p class="desc">带权并查集，中等难度</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="sp" data-container>
+      <div class="section-header">
+        <div class="icon">🛣️</div>
+        <div><h2>最短路</h2></div>
+        <span class="badge">Shortest Path</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 解决什么问题？</h4><p>带权图中找两点间最短路径。<strong>Dijkstra</strong>：最快 O((V+E)logV)，但不能有负权边。<strong>Floyd</strong>：O(V³) 求所有点对。<strong>SPFA</strong>：可负权但最坏 O(VE) 容易被卡。</p></div>
+            <div class="info-card"><h4>📖 Dijkstra 原理</h4><p><strong>贪心</strong>：每次取距离最小的未确定节点（用小根堆维护），用其出边<strong>松弛</strong>邻居。边权非负保证一旦确定就不会再变小。<strong>惰性删除</strong>：同节点多次入堆时跳过旧版本（检查 d==dist[u]）。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">Dijkstra 堆优化</td><td class="comp">O((V+E)log V)</td><td>不能处理负权边</td></tr><tr><td class="op">Floyd-Warshall</td><td class="comp">O(V³)</td><td>所有点对，可处理负权</td></tr><tr><td class="op">SPFA</td><td class="comp">O(VE) 最坏</td><td>可负权但容易被卡</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">typedef long long ll;
+vector<ll>dijkstra(int s,vector<vector<pair<int,ll>>>&g){
+  int n=g.size();vector<ll>d(n,1e18);
+  priority_queue<pair<ll,int>,vector<pair<ll,int>>,greater<>>pq;
+  d[s]=0;pq.push({0,s});
+  while(!pq.empty()){
+    auto[D,u]=pq.top();pq.pop();
+    if(D!=d[u])continue; // 惰性删除
+    for(auto[v,w]:g[u])
+      if(d[v]>D+w){d[v]=D+w;pq.push({d[v],v});}
+  }
+  return d;
+}
+
+// Floyd O(V³) — 所有点对最短路
+for(int k=1;k<=n;k++)
+  for(int i=1;i<=n;i++)for(int j=1;j<=n;j++)
+    d[i][j]=min(d[i][j],d[i][k]+d[k][j]);</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>⚠️ 注意：</strong> Dijkstra <strong>不能处理负权边</strong>！有负权考虑 SPFA（但最坏 O(VE) 可能被卡）。路网、时间等自然场景通常非负。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P3371" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P3371 【模板】单源最短路径（弱）</h5>
+                  <p class="desc">Dijkstra 入门</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P4779" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P4779 【模板】单源最短路径（标准）</h5>
+                  <p class="desc">堆优化 Dijkstra 模板</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1629" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1629 邮递员送信</h5>
+                  <p class="desc">正反图两次 Dijkstra</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P1119" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P1119 灾后重建</h5>
+                  <p class="desc">Floyd 变种，动态加点</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<!-- ============================================================ -->
+
+    <section class="section" id="string" data-container>
+      <div class="section-header">
+        <div class="icon">📝</div>
+        <div><h2>字符串算法</h2></div>
+        <span class="badge">String</span>
+      </div>
+      <div class="info-grid">
+            <div class="info-card"><h4>💡 解决什么问题？</h4><p>在长文本中找子串，暴力 O(nm)。<strong>字符串哈希</strong> 把比较变成 O(1)。<strong>KMP</strong> 利用已匹配信息避免回溯主串，O(n+m)。</p></div>
+            <div class="info-card"><h4>📖 KMP 核心：next 数组</h4><p><code>next[i]</code> = pattern 前 i 个字符的<strong>最长公共前后缀</strong>长度。匹配失败时不回溯主串指针，而是根据 next 跳转 pattern 的位置——利用已匹配的信息。</p></div>
+      </div>
+      <table class="complexity-table">
+        <thead><tr><th>操作</th><th>复杂度</th><th>说明</th></tr></thead>
+        <tbody><tr><td class="op">字符串哈希</td><td class="comp">O(n) 预处理 / O(1) 比较</td><td>自然溢出或双哈希防冲突</td></tr><tr><td class="op">KMP 匹配</td><td class="comp">O(n+m)</td><td>next 数组 + 不回溯主串</td></tr><tr><td class="op">KMP 求 next 数组</td><td class="comp">O(m)</td><td>模式串自匹配</td></tr></tbody>
+      </table>
+      <div class="collapsible">
+        <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 常用代码模板 <span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <div class="code-wrapper">
+            <div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+            <pre class="code-block">// 字符串哈希 — O(1) 比较任意子串
+typedef unsigned long long ull;const ull B=131;
+ull h[N],p[N];
+void init(string&s){int n=s.size();p[0]=1;
+  for(int i=0;i<n;i++){
+    h[i+1]=h[i]*B+s[i];p[i+1]=p[i]*B;}}
+ull get(int l,int r){return h[r+1]-h[l]*p[r-l+1];}
+
+// KMP — O(n+m) 字符串匹配
+vector<int>getNext(string&p){
+  int m=p.size();vector<int>nxt(m);
+  for(int i=1,j=0;i<m;i++){
+    while(j&&p[i]!=p[j])j=nxt[j-1];
+    if(p[i]==p[j])j++;nxt[i]=j;
+  }return nxt;
+}
+vector<int>kmp(string&s,string&p){
+  auto nxt=getNext(p);vector<int>r;
+  for(int i=0,j=0;i<s.size();i++){
+    while(j&&s[i]!=p[j])j=nxt[j-1];
+    if(s[i]==p[j])j++;
+    if(j==p.size()){r.push_back(i-j+1);j=nxt[j-1];}
+  }return r;
+}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="tip-box"><strong>🏆 学习建议：</strong> 先学字符串哈希（简单实用），再挑战 KMP。KMP 的 next 数组理解需要多看几遍——核心是"利用已知匹配信息，不回溯主串"。</div>
+      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      <div class="problems-grid">
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P3370" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P3370 【模板】字符串哈希</h5>
+                  <p class="desc">哈希判重模板</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P3375" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P3375 【模板】KMP</h5>
+                  <p class="desc">KMP 模板题</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P4391" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P4391 [BOI2009] Radio Transmission</h5>
+                  <p class="desc">KMP 求字符串周期</p>
+                  <span class="link-icon">↗</span>
+                </a>
+                <a class="problem-card" href="https://www.luogu.com.cn/problem/P5410" target="_blank" rel="noopener">
+                  <span class="source source-luogu">洛谷</span>
+                  <h5>P5410 【模板】扩展KMP</h5>
+                  <p class="desc">Z 函数，中等偏难</p>
+                  <span class="link-icon">↗</span>
+                </a>
+      </div>
+    </section>
+
+<footer class="footer">
+  <p>🦋 算法学习笔记 — 从零到竞赛 | 持续更新中</p>
+  <p style="font-size:0.8rem;margin-top:8px;">👻 胡桃主题 · 洛谷 / Codeforces / 牛客例题持续收录 · 建议收藏以便随时查阅</p>
+</footer>
+
+</main>
+
+<div id="toastContainer"></div>
+
+<script>
+const DAILY_PROBLEMS = [{"title":"P1177 【模板】排序","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1177","desc":"直接使用 sort() 完成排序"},{"title":"P1059 [NOIP2006] 明明的随机数","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1059","desc":"排序 + 去重：sort + unique + erase"},{"title":"P2249 【深基13.例1】查找","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P2249","desc":"二分查找模板题"},{"title":"P1873 [COCI] 砍树","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1873","desc":"二分答案入门，理解 check 函数"},{"title":"P8218 【深进1.例1】求区间和","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P8218","desc":"前缀和模板题"},{"title":"P2367 语文成绩","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P2367","desc":"差分模板题"},{"title":"P1638 逛画展","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1638","desc":"滑动窗口模板题"},{"title":"P1102 A-B 数对","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1102","desc":"双指针 / 哈希表计数"},{"title":"P1029 [NOIP2001] GCD和LCM问题","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1029","desc":"最大公约数与最小公倍数"},{"title":"P1226 【模板】快速幂","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1226","desc":"快速幂模板题"},{"title":"P1090 [NOIP2004] 合并果子","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1090","desc":"哈夫曼树，小根堆贪心"},{"title":"P1803 凌乱的yyy / 线段覆盖","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1803","desc":"区间调度模板题"},{"title":"P1706 全排列问题","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1706","desc":"DFS 回溯入门"},{"title":"P1605 迷宫","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1605","desc":"DFS 计数所有路径"},{"title":"P1115 最大子段和","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1115","desc":"DP 入门必做"},{"title":"P1020 [NOIP1999] 导弹拦截","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1020","desc":"LIS + Dilworth 定理"},{"title":"P1048 [NOIP2005] 采药","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1048","desc":"01背包模板，经典入门"},{"title":"P1616 疯狂的采药","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1616","desc":"完全背包模板"},{"title":"P3367 【模板】并查集","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P3367","desc":"DSU 模板题"},{"title":"P1111 修复公路","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P1111","desc":"DSU + 排序，判断连通时间"},{"title":"P3371 【模板】单源最短路径（弱）","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P3371","desc":"Dijkstra 入门"},{"title":"P4779 【模板】单源最短路径（标准）","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P4779","desc":"堆优化 Dijkstra 模板"},{"title":"P3370 【模板】字符串哈希","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P3370","desc":"哈希判重模板"},{"title":"P3375 【模板】KMP","diff":"普及−","source":"洛谷","url":"https://www.luogu.com.cn/problem/P3375","desc":"KMP 模板题"}];
+
+function pickDailyProblem() {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+  const reroll = parseInt(localStorage.getItem('daily-reroll-index-' + seed) || '0');
+  const idx = (seed * 131 + reroll * 9973) % DAILY_PROBLEMS.length;
+  const p = DAILY_PROBLEMS[idx];
+
+  const els = {
+    dailyTitle: document.getElementById('dailyTitle'),
+    dailyAlgo: document.getElementById('dailyAlgo'),
+    dailyDiff: document.getElementById('dailyDiff'),
+    dailySource: document.getElementById('dailySource'),
+    dailyDesc: document.getElementById('dailyDesc'),
+    dailyLink: document.getElementById('dailyLink'),
+  };
+  if (els.dailyTitle) els.dailyTitle.textContent = p.title;
+  if (els.dailyAlgo) els.dailyAlgo.textContent = p.algo;
+  if (els.dailyDiff) els.dailyDiff.textContent = p.diff;
+  if (els.dailySource) els.dailySource.textContent = p.source;
+  if (els.dailyDesc) els.dailyDesc.textContent = p.desc;
+  if (els.dailyLink) els.dailyLink.href = p.url;
+
+  localStorage.setItem('daily-reroll-index-' + seed, reroll + 1);
+}
+
+// ===== Theme Toggle =====
+// Default: light theme (no data-theme attribute → :root light CSS)
+// Click 🔥 to switch to Hu Tao dark mode
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');   // back to light
+  } else {
+    html.setAttribute('data-theme', 'dark');
+  }
+  document.querySelector('.theme-toggle').textContent = isDark ? '🔥' : '👻';
+}
+// Always start light
+document.documentElement.removeAttribute('data-theme');
+
+// ===== Collapsible =====
+function toggleCollapse(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+// ===== Copy Code =====
+function copyCode(btn) {
+  const code = btn.closest('.code-wrapper').querySelector('.code-block').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '✅ 已复制';
+    showToast('代码已复制到剪贴板！');
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '📋 复制';
+    }, 2000);
+  });
+}
+
+// ===== Toast =====
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 2200);
+}
+
+// ===== Search Filter =====
+function filterContainers() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('[data-container]').forEach(section => {
+    const text = section.textContent.toLowerCase();
+    section.style.display = text.includes(query) ? '' : 'none';
+  });
+}
+
+// ===== TOC Builder =====
+(function buildTOC() {
+  const sidebar = document.getElementById('tocSidebar');
+  const sections = document.querySelectorAll('[data-container]');
+  sections.forEach((sec, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'toc-dot';
+    const tooltip = document.createElement('span');
+    tooltip.className = 'toc-tooltip';
+    const h2 = sec.querySelector('h2');
+    tooltip.textContent = h2 ? h2.textContent : 'Section ' + (i+1);
+    dot.appendChild(tooltip);
+    dot.onclick = () => sec.scrollIntoView({ behavior: 'smooth' });
+    sidebar.appendChild(dot);
+  });
+})();
+
+// ===== TOC Active Tracking =====
+const tocDots = document.querySelectorAll('.toc-dot');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(document.querySelectorAll('[data-container]')).indexOf(entry.target);
+      tocDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('[data-container]').forEach(s => observer.observe(s));
+
+// ===== Hu Tao Themed Particles: Fire Embers + Butterflies =====
+(function particles() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const N = 65;
+  // Create ember particles and butterfly particles
+  for (let i = 0; i < N; i++) {
+    const isButterfly = i < 8; // 8 butterflies
+    particles.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * (isButterfly ? 0.35 : 0.6),
+      vy: (Math.random() - 0.5) * (isButterfly ? 0.3 : 0.45) - (isButterfly ? 0.15 : 0.25),
+      r: isButterfly ? 5 + Math.random() * 4 : 0.8 + Math.random() * 2.2,
+      alpha: isButterfly ? 0.18 + Math.random() * 0.22 : 0.12 + Math.random() * 0.25,
+      type: isButterfly ? 'butterfly' : 'ember',
+      phase: Math.random() * Math.PI * 2,
+      wingPhase: Math.random() * Math.PI * 2,
+      colorIndex: Math.floor(Math.random() * 3)
+    });
+  }
+
+  // Ember colors — Hu Tao fire palette
+  const emberColors = [
+    { r: 224, g: 68, b: 68 },   // crimson red
+    { r: 255, g: 94, b: 58 },   // pyro orange
+    { r: 212, g: 160, b: 23 },  // gold
+  ];
+
+  function drawButterfly(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    const wingAngle = Math.sin(p.wingPhase) * 0.4;
+    const scale = p.r / 8;
+
+    // Upper wings
+    ctx.beginPath();
+    ctx.ellipse(-3 * scale, -1 * scale, 3.5 * scale, 2.8 * scale, -0.3 + wingAngle, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(224, 68, 68, ${p.alpha * 1.1})`;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.ellipse(3 * scale, -1 * scale, 3.5 * scale, 2.8 * scale, 0.3 - wingAngle, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(224, 68, 68, ${p.alpha * 1.1})`;
+    ctx.fill();
+
+    // Lower wings (smaller)
+    ctx.beginPath();
+    ctx.ellipse(-2 * scale, 2.5 * scale, 2.2 * scale, 1.8 * scale, 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212, 160, 23, ${p.alpha * 0.9})`;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.ellipse(2 * scale, 2.5 * scale, 2.2 * scale, 1.8 * scale, -0.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212, 160, 23, ${p.alpha * 0.9})`;
+    ctx.fill();
+
+    // Body
+    ctx.beginPath();
+    ctx.ellipse(0, 0.5 * scale, 0.8 * scale, 2.5 * scale, 0, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(180, 100, 60, ${p.alpha * 1.2})`;
+    ctx.fill();
+
+    // Gold antennae dots
+    ctx.beginPath();
+    ctx.arc(0, -3.8 * scale, 0.6 * scale, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 200, 80, ${p.alpha * 1.3})`;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+    particles.forEach((p, i) => {
+      // Move upward (embers rise like fire)
+      p.x += p.vx;
+      p.y += p.vy;
+      p.wingPhase += p.type === 'butterfly' ? 0.025 : 0;
+
+      // Wrap around
+      if (p.x < -30) p.x = w + 30;
+      if (p.x > w + 30) p.x = -30;
+      if (p.y < -30) p.y = h + 30;
+      if (p.y > h + 30) p.y = -30;
+
+      if (p.type === 'butterfly') {
+        drawButterfly(p);
+      } else {
+        // Ember — brighter on dark, subtle on light
+        const c = emberColors[p.colorIndex];
+        const baseAlpha = isDark ? p.alpha : p.alpha * 0.35;
+        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+        glow.addColorStop(0, `rgba(${c.r},${c.g},${c.b},${baseAlpha})`);
+        glow.addColorStop(0.4, `rgba(${c.r},${c.g},${c.b},${baseAlpha * 0.5})`);
+        glow.addColorStop(1, `rgba(${c.r},${c.g},${c.b},0)`);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+        ctx.fillStyle = glow;
+        ctx.fill();
+
+        // Core — brighter on dark
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = isDark
+          ? `rgba(255, 220, 180, ${p.alpha * 1.3})`
+          : `rgba(192, 80, 50, ${p.alpha * 0.4})`;
+        ctx.fill();
+      }
+
+      // Connection lines
+      const connColor = isDark ? '224, 68, 68' : '192, 57, 43';
+      for (let j = i + 1; j < N; j++) {
+        const dx = p.x - particles[j].x;
+        const dy = p.y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          const connAlpha = 0.05 * (1 - dist / 140);
+          ctx.strokeStyle = `rgba(${connColor}, ${connAlpha})`;
+          ctx.lineWidth = 0.4;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ===== Scroll Progress Bar =====
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+  // Back to top button
+  const btn = document.getElementById('backToTop');
+  btn.classList.toggle('visible', scrollTop > 400);
+});
+
+// ===== Hu Tao Mascot Click =====
+(function() {
+  const mascot = document.getElementById('hutaoMascot');
+  if (!mascot) return;
+  const lines = [
+    '大丘丘病了二丘丘瞧，三丘丘采药四丘丘熬～ 🎵',
+    '往生堂第七十七代堂主，就是胡桃我啦！ 👻',
+    '阴阳有序，命运无常。',
+    '吃饱喝饱，一路走好！ 🦋',
+    '需要棺材吗？给你打八折哦～',
+    '蝶引来生，阴阳有序。',
+    '太阳出来我晒太阳，月亮出来我晒月亮咯～ ☀️',
+    '有业务吗？没有的话我走啦～',
+    '本堂主在此，邪祟退散！ 🔥',
+    '你看这个幽灵，多可爱呀～ 👻',
+  ];
+  mascot.addEventListener('click', () => {
+    const line = lines[Math.floor(Math.random() * lines.length)];
+    showToast(line);
+    mascot.style.animation = 'none';
+    void mascot.offsetWidth;
+    mascot.style.animation = 'mascotFloat 0.6s ease';
+    setTimeout(() => {
+      mascot.style.animation = 'mascotFloat 3.5s ease-in-out infinite';
+    }, 600);
+  });
+})();
+
+// ===== Reveal animation on scroll =====
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.info-card, .problem-card, .tip-box, .collapsible').forEach(el => {
+  el.style.opacity = '0';
+  revealObserver.observe(el);
+});
+
+// ===== Hu Tao Mascot Click =====
+(function() {
+  const mascot = document.getElementById('hutaoMascot');
+  if (!mascot) return;
+  const lines = [
+    '大丘丘病了二丘丘瞧，三丘丘采药四丘丘熬～ 🎵',
+    '往生堂第七十七代堂主，就是胡桃我啦！ 👻',
+    '阴阳有序，命运无常。',
+    '吃饱喝饱，一路走好！ 🦋',
+    '需要棺材吗？给你打八折哦～',
+    '蝶引来生，阴阳有序。',
+    '太阳出来我晒太阳，月亮出来我晒月亮咯～ ☀️',
+    '加油学 STL！本堂主看好你哦～ 🔥',
+    '本堂主在此，邪祟退散！ 🔥',
+    '你看这个幽灵，多可爱呀～ 👻',
+  ];
+  mascot.addEventListener('click', () => {
+    const line = lines[Math.floor(Math.random() * lines.length)];
+    showToast(line);
+  });
+})();
+
+// Init daily problem on page load
+pickDailyProblem();
+
+</script>
+
+</body>
+</html>

@@ -14,7 +14,7 @@ const mime = {
 };
 
 http.createServer((req, res) => {
-  let filePath = path.join(DIR, req.url === '/' ? 'STL容器完全指南.html' : req.url.split('?')[0]);
+  let filePath = path.join(DIR, req.url === '/' ? 'home.html' : req.url.split('?')[0]);
   const ext = path.extname(filePath);
   try {
     const data = fs.readFileSync(filePath);

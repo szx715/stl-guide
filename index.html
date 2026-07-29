@@ -5,42 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C++ STL 容器完全指南 — 算法竞赛必备</title>
 <style>
-/* ===== CSS Variables ===== */
+/* ===== CSS Variables — Hu Tao Theme ===== */
+/* Default: Light / White theme */
 :root {
-  --bg: #0f172a;
-  --bg-card: #1e293b;
-  --bg-card-hover: #273449;
-  --text: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-heading: #f1f5f9;
-  --accent: #38bdf8;
-  --accent2: #818cf8;
-  --accent3: #f472b6;
-  --border: #334155;
-  --code-bg: #0d1117;
-  --code-text: #c9d1d9;
-  --gradient-1: linear-gradient(135deg, #38bdf8, #818cf8);
-  --gradient-2: linear-gradient(135deg, #f472b6, #fb923c);
-  --gradient-3: linear-gradient(135deg, #34d399, #38bdf8);
-  --gradient-4: linear-gradient(135deg, #a78bfa, #f472b6);
-  --shadow: 0 4px 24px rgba(0,0,0,0.3);
-  --shadow-hover: 0 8px 40px rgba(56,189,248,0.15);
+  --bg: #fdf6f0;
+  --bg-card: #fffaf5;
+  --bg-card-hover: #fef0e5;
+  --text: #3d2020;
+  --text-secondary: #8b5e3c;
+  --text-heading: #1a0a0a;
+  --border: #e8d5c8;
+  --code-bg: #fef5ed;
+  --code-text: #3d2020;
+  --accent: #c0392b;
+  --accent2: #b8860b;
+  --accent3: #e85d3a;
+  --gradient-1: linear-gradient(135deg, #c0392b, #b8860b);
+  --gradient-2: linear-gradient(135deg, #e85d3a, #d4a017);
+  --gradient-3: linear-gradient(135deg, #b8860b, #c0392b);
+  --gradient-4: linear-gradient(135deg, #c0392b, #e85d3a);
+  --gradient-fire: linear-gradient(180deg, #e85d3a, #d4a017, #e85d3a);
+  --shadow: 0 4px 24px rgba(0,0,0,0.06);
+  --shadow-hover: 0 8px 40px rgba(192,57,43,0.15);
   --radius: 12px;
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --butterfly-color-1: #c0392b;
+  --butterfly-color-2: #b8860b;
 }
 
-[data-theme="light"] {
-  --bg: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f1f5f9;
-  --text: #334155;
-  --text-secondary: #64748b;
-  --text-heading: #0f172a;
-  --border: #e2e8f0;
-  --code-bg: #f1f5f9;
-  --code-text: #1e293b;
-  --shadow: 0 4px 24px rgba(0,0,0,0.08);
-  --shadow-hover: 0 8px 40px rgba(56,189,248,0.2);
+/* Hu Tao Dark Mode */
+[data-theme="dark"] {
+  --bg: #1a0a0a;
+  --bg-card: #241515;
+  --bg-card-hover: #2d1a1a;
+  --text: #e8d5c8;
+  --text-secondary: #b8957e;
+  --text-heading: #f5e6d8;
+  --accent: #e04444;
+  --accent2: #d4a017;
+  --accent3: #ff7b5a;
+  --border: #3d2020;
+  --code-bg: #0d0505;
+  --code-text: #e0c8b0;
+  --gradient-1: linear-gradient(135deg, #e04444, #d4a017);
+  --gradient-2: linear-gradient(135deg, #ff5e3a, #ff9a3c);
+  --gradient-3: linear-gradient(135deg, #d4a017, #e04444);
+  --gradient-4: linear-gradient(135deg, #c0392b, #e04444);
+  --gradient-fire: linear-gradient(180deg, #ff5e3a, #ff9a3c, #ff5e3a);
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-hover: 0 8px 40px rgba(224,68,68,0.2);
+  --butterfly-color-1: #e04444;
+  --butterfly-color-2: #d4a017;
 }
 
 /* ===== Reset & Base ===== */
@@ -55,16 +70,84 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== Scrollbar ===== */
+/* ===== Scrollbar — Fire themed ===== */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8b0000, #c0392b, #8b0000); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #c0392b, #e04444, #c0392b); }
 
 /* ===== Floating Particles ===== */
 #particles {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none; z-index: 0;
+}
+
+/* ===== Hu Tao Butterfly Decorations ===== */
+.butterfly-decor {
+  position: fixed; pointer-events: none; z-index: 0;
+  font-size: 2rem; opacity: 0.08;
+  animation: butterflyFloat 12s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+.butterfly-decor:nth-child(2) { animation-delay: -3s; animation-duration: 14s; }
+.butterfly-decor:nth-child(3) { animation-delay: -6s; animation-duration: 16s; }
+.butterfly-decor:nth-child(4) { animation-delay: -9s; animation-duration: 13s; }
+.butterfly-decor:nth-child(5) { animation-delay: -2s; animation-duration: 15s; }
+.butterfly-decor:nth-child(6) { animation-delay: -7s; animation-duration: 17s; }
+
+@keyframes butterflyFloat {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  15% { transform: translate(80px, -60px) rotate(8deg) scale(1.15); }
+  30% { transform: translate(160px, 20px) rotate(-5deg) scale(0.9); }
+  45% { transform: translate(60px, -100px) rotate(12deg) scale(1.1); }
+  60% { transform: translate(-40px, -40px) rotate(-8deg) scale(0.85); }
+  75% { transform: translate(-120px, -80px) rotate(6deg) scale(1.05); }
+  90% { transform: translate(20px, 30px) rotate(-3deg) scale(0.95); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+
+/* Ghostly glow under cards */
+.info-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(224,68,68,0.3), rgba(212,160,23,0.3), transparent);
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+.info-card:hover::after {
+  width: 80%;
+  background: linear-gradient(90deg, transparent, rgba(224,68,68,0.6), rgba(212,160,23,0.6), transparent);
+}
+
+/* Plum blossom accent for section headers */
+.section-header::before {
+  content: '🌸';
+  position: absolute; right: -10px; top: -15px;
+  font-size: 1.2rem; opacity: 0; pointer-events: none;
+  transition: all 0.6s ease;
+}
+.section-header {
+  position: relative;
+}
+.section-header:hover::before {
+  opacity: 0.6;
+}
+
+/* Butterfly trail on section icons */
+.section-header .icon {
+  position: relative;
+}
+.section-header .icon::after {
+  content: '🦋';
+  position: absolute; right: -8px; bottom: -8px;
+  font-size: 0.7rem; opacity: 0;
+  transition: all 0.4s ease;
+  transform: translateY(5px);
+}
+.section-header:hover .icon::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ===== Navbar ===== */
@@ -85,7 +168,16 @@ body {
   background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: -0.5px;
+  filter: drop-shadow(0 0 8px rgba(224,68,68,0.3));
 }
+.nav-center { display: flex; align-items: center; gap: 8px; }
+.nav-link {
+  padding: 6px 16px; border-radius: 20px; text-decoration: none;
+  font-weight: 600; font-size: 0.85rem; color: var(--text-secondary);
+  border: 1px solid var(--border); transition: all var(--transition);
+}
+.nav-link:hover { border-color: var(--accent); color: var(--accent); }
+.nav-link.active { background: var(--gradient-1); color: #fff; border-color: transparent; }
 .nav-right { display: flex; align-items: center; gap: 16px; }
 .theme-toggle {
   width: 44px; height: 44px; border-radius: 22px; border: 2px solid var(--border);
@@ -93,7 +185,7 @@ body {
   display: flex; align-items: center; justify-content: center;
   transition: all var(--transition);
 }
-.theme-toggle:hover { border-color: var(--accent); color: var(--accent); transform: rotate(30deg); }
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); transform: rotate(30deg); box-shadow: 0 0 20px rgba(224,68,68,0.3); }
 .search-box {
   position: relative;
 }
@@ -124,7 +216,11 @@ body {
   background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 16px;
-  animation: fadeInUp 0.8s ease;
+  animation: fadeInUp 0.8s ease, titleGlow 3s ease-in-out infinite;
+}
+@keyframes titleGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(224,68,68,0.4)); }
+  50% { filter: drop-shadow(0 0 16px rgba(224,68,68,0.7)) drop-shadow(0 0 24px rgba(212,160,23,0.3)); }
 }
 .hero .subtitle {
   font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 32px;
@@ -153,6 +249,44 @@ body {
   50% { transform: translateY(-10px); }
 }
 
+/* ===== Daily Problem ===== */
+.daily-section {
+  background: var(--bg-card); border: 2px solid var(--accent);
+  border-radius: var(--radius); padding: 28px 32px; margin-bottom: 32px;
+  box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.daily-section::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+  background: linear-gradient(180deg, #c0392b, #d4a017);
+}
+.daily-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.daily-badge {
+  padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
+  background: var(--gradient-1); color: #fff;
+  animation: dailypulse 2s ease-in-out infinite;
+}
+@keyframes dailypulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+.daily-title { font-size: 1.1rem; font-weight: 700; color: var(--text-heading); }
+.daily-info { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+.daily-info span { font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; }
+.daily-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 20px; border-radius: 24px; background: var(--gradient-1);
+  color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem;
+  transition: all var(--transition);
+}
+.daily-link:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(192,57,43,0.4); }
+.daily-reroll {
+  padding: 8px 16px; border-radius: 24px; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-secondary); cursor: pointer;
+  font-size: 0.85rem; transition: all var(--transition);
+}
+.daily-reroll:hover { border-color: var(--accent); color: var(--accent); }
+/* Responsive daily */
+@media (max-width: 768px) {
+  .daily-section { padding: 20px; }
+}
+
 /* ===== Quick Nav Grid ===== */
 .quick-nav {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -167,7 +301,7 @@ body {
 }
 .quick-nav a::before {
   content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: var(--gradient-1); opacity: 0; transition: opacity var(--transition); z-index: 0;
+  background: linear-gradient(135deg, #c0392b, #e04444, #d4a017); opacity: 0; transition: opacity var(--transition); z-index: 0;
 }
 .quick-nav a:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: transparent; }
 .quick-nav a:hover::before { opacity: 1; }
@@ -237,7 +371,7 @@ body {
 }
 .code-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; background: #1a2332;
+  padding: 10px 16px; background: #1a0c0c;
   border-bottom: 1px solid var(--border);
 }
 .code-header .lang { color: var(--accent); font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
@@ -267,15 +401,15 @@ body {
   transition: all var(--transition);
   cursor: pointer; position: relative; overflow: hidden;
 }
-.problem-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--accent); }
+.problem-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: #e04444; }
 .problem-card .source {
   display: inline-block; padding: 3px 10px; border-radius: 12px;
   font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 .source-luogu { background: #fef3c7; color: #92400e; }
-.source-cf { background: #dbeafe; color: #1e40af; }
-.source-atc { background: #fce7f3; color: #9d174d; }
+.source-cf { background: #fce7f3; color: #9d174d; }
+.source-atc { background: #dbeafe; color: #1e40af; }
 .source-other { background: #d1fae5; color: #065f46; }
 .problem-card h5 { margin: 10px 0 6px; font-size: 1rem; color: var(--text-heading); }
 .problem-card .desc { color: var(--text-secondary); font-size: 0.85rem; }
@@ -292,11 +426,11 @@ body {
   padding: 16px 20px; margin: 20px 0;
   background: var(--bg-card); color: var(--text);
 }
-.tip-box.warning { border-color: #f59e0b; }
-.tip-box.success { border-color: #34d399; }
+.tip-box.warning { border-color: #d4a017; }
+.tip-box.success { border-color: #c0392b; }
 .tip-box strong { color: var(--accent); }
-.tip-box.warning strong { color: #f59e0b; }
-.tip-box.success strong { color: #34d399; }
+.tip-box.warning strong { color: #d4a017; }
+.tip-box.success strong { color: #e04444; }
 
 /* ===== Collapsible ===== */
 .collapsible {
@@ -309,7 +443,7 @@ body {
   cursor: pointer; text-align: left; display: flex; align-items: center;
   justify-content: space-between; transition: all var(--transition);
 }
-.collapsible-trigger:hover { border-color: var(--accent); }
+.collapsible-trigger:hover { border-color: #e04444; background: var(--bg-card-hover); }
 .collapsible-trigger .arrow {
   transition: transform var(--transition); font-size: 0.8rem;
 }
@@ -344,27 +478,28 @@ body {
 }
 .toc-dot:hover .toc-tooltip { opacity: 1; }
 
-/* ===== Scroll Progress Bar ===== */
+/* ===== Scroll Progress Bar — Hu Tao Fire ===== */
 .progress-bar {
   position: fixed; top: 0; left: 0; height: 3px;
-  background: linear-gradient(90deg, #38bdf8, #818cf8, #f472b6);
+  background: linear-gradient(90deg, #8b0000, #e04444, #d4a017, #ff5e3a);
   z-index: 1001; transition: width 0.1s linear;
+  box-shadow: 0 0 12px rgba(224,68,68,0.5), 0 0 24px rgba(255,94,58,0.3);
 }
 
-/* ===== Back to Top ===== */
+/* ===== Back to Top — Hu Tao Ghost ===== */
 .back-to-top {
   position: fixed; bottom: 32px; right: 32px; z-index: 999;
   width: 48px; height: 48px; border-radius: 50%;
-  background: var(--gradient-1); color: #fff; border: none;
+  background: linear-gradient(135deg, #c0392b, #e04444); color: #fff; border: none;
   font-size: 1.3rem; cursor: pointer;
-  box-shadow: 0 4px 20px rgba(56,189,248,0.4);
+  box-shadow: 0 4px 20px rgba(224,68,68,0.5), 0 0 30px rgba(255,94,58,0.2);
   opacity: 0; transform: translateY(20px);
   pointer-events: none;
-  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s;
   display: flex; align-items: center; justify-content: center;
 }
 .back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.back-to-top:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(56,189,248,0.5); }
+.back-to-top:hover { transform: translateY(-4px) scale(1.08); box-shadow: 0 8px 35px rgba(224,68,68,0.7), 0 0 50px rgba(255,94,58,0.35); }
 
 /* ===== Footer ===== */
 .footer {
@@ -376,12 +511,73 @@ body {
 .toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   padding: 12px 24px; border-radius: 24px;
-  background: #34d399; color: #fff; font-weight: 600;
+  background: linear-gradient(135deg, #c0392b, #e04444); color: #fff; font-weight: 600;
   z-index: 9999; animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
-  box-shadow: 0 4px 20px rgba(52,211,153,0.3);
+  box-shadow: 0 4px 20px rgba(224,68,68,0.4);
 }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+
+/* ===== Hu Tao Q-version Mascot ===== */
+.hutao-mascot {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 998;
+  width: 90px;
+  height: 90px;
+  cursor: pointer;
+  animation: mascotFloat 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.hutao-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 18px;
+  /* Soft edge glow */
+  box-shadow: 0 0 15px rgba(224,68,68,0.25);
+}
+.hutao-mascot:hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 6px 24px rgba(224,68,68,0.55));
+  animation-play-state: paused;
+  z-index: 1000;
+}
+.hutao-mascot:active {
+  transform: scale(0.9);
+}
+
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-10px) rotate(1deg); }
+  50% { transform: translateY(-3px) rotate(0deg); }
+  75% { transform: translateY(-7px) rotate(-1deg); }
+}
+
+/* Ghost buddy floating beside mascot */
+.ht-ghost-buddy {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  font-size: 1.4rem;
+  animation: ghostFloat 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(180,180,240,0.6));
+  z-index: 10;
+  pointer-events: none;
+}
+@keyframes ghostFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-10px) rotate(-6deg); }
+  60% { transform: translateY(-3px) rotate(3deg); }
+  85% { transform: translateY(-12px) rotate(-4deg); }
+}
+
+/* Hide on very small screens */
+@media (max-width: 640px) {
+  .hutao-mascot, .ht-ghost-buddy { display: none; }
+}
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
@@ -400,19 +596,38 @@ body {
 <div class="progress-bar" id="progressBar"></div>
 
 <!-- Back to Top -->
-<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">⬆</button>
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">👻</button>
 
 <canvas id="particles"></canvas>
 
+<!-- ===== Hu Tao Q-version Mascot ===== -->
+<div class="hutao-mascot" id="hutaoMascot" title="往生堂第七十七代堂主 — 胡桃 🦋">
+  <img src="hutao.jpg" alt="胡桃 Q版" class="hutao-img">
+  <div class="ht-ghost-buddy">👻</div>
+</div>
+
+<!-- Hu Tao Butterfly Decorations -->
+<div class="butterfly-decor" style="top:12%;left:8%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:25%;right:10%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:50%;left:5%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:65%;right:6%;" aria-hidden="true">🦋</div>
+<div class="butterfly-decor" style="top:80%;left:12%;" aria-hidden="true">👻</div>
+<div class="butterfly-decor" style="top:35%;left:90%;" aria-hidden="true">🌸</div>
+
 <!-- ===== Navbar ===== -->
 <nav class="navbar">
-  <div class="logo">⚡ STL 容器完全指南</div>
+  <a class="logo" href="index.html" style="text-decoration:none;">🦋 STL 容器完全指南</a>
+  <div class="nav-center" style="display:flex;align-items:center;gap:8px;">
+    <a class="nav-link" href="home.html" style="padding:6px 16px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.85rem;color:var(--text-secondary);border:1px solid var(--border);" onmouseenter="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">🏠 主页</a>
+    <a class="nav-link active" href="index.html" style="padding:6px 16px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.85rem;color:#fff;background:var(--gradient-1);">📦 STL</a>
+    <a class="nav-link" href="algo.html" style="padding:6px 16px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.85rem;color:var(--text-secondary);border:1px solid var(--border);" onmouseenter="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">📖 算法</a>
+  </div>
   <div class="nav-right">
     <div class="search-box">
       <span class="search-icon">🔍</span>
       <input type="text" id="searchInput" placeholder="搜索容器..." oninput="filterContainers()">
     </div>
-    <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">🌓</button>
+    <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">🔥</button>
   </div>
 </nav>
 
@@ -424,12 +639,30 @@ body {
 
 <!-- Hero -->
 <section class="hero">
-  <h1>C++ STL 容器完全指南</h1>
+  <h1>🦋 C++ STL 容器完全指南</h1>
   <p class="subtitle">专为算法竞赛打造的 STL 容器速查手册 — 涵盖底层实现、时间复杂度、常用操作与经典例题</p>
   <div class="hero-stats">
     <div class="stat-item"><div class="stat-number">14</div><div class="stat-label">核心容器</div></div>
     <div class="stat-item"><div class="stat-number">32+</div><div class="stat-label">经典例题</div></div>
     <div class="stat-item"><div class="stat-number">O(·)</div><div class="stat-label">复杂度分析</div></div>
+  </div>
+</section>
+
+<!-- ===== Daily Problem ===== -->
+<section class="daily-section" id="dailySection">
+  <div class="daily-header">
+    <span class="daily-badge">📅 每日一题</span>
+    <span class="daily-title" id="dailyTitle">加载中...</span>
+  </div>
+  <div class="daily-info">
+    <span>🏷️ <strong id="dailyAlgo">—</strong></span>
+    <span>📊 <strong id="dailyDiff">—</strong></span>
+    <span>📍 <strong id="dailySource">—</strong></span>
+  </div>
+  <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:12px;" id="dailyDesc"></p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <a class="daily-link" id="dailyLink" href="#" target="_blank" rel="noopener">🔗 去刷题 →</a>
+    <button class="daily-reroll" onclick="pickDailyProblem()">🎲 换一题</button>
   </div>
 </section>
 
@@ -1911,8 +2144,8 @@ template&lt;typename T&gt; ostream&amp; operator&lt;&lt;(ostream &amp;os, const 
 
 <!-- Footer -->
 <footer class="footer">
-  <p>📖 C++ STL 容器完全指南 — 专为算法竞赛打造 | 持续更新中</p>
-  <p style="font-size:0.8rem;margin-top:8px;">洛谷 / Codeforces / AtCoder 例题持续收录 · 建议收藏以便随时查阅</p>
+  <p>🦋 C++ STL 容器完全指南 — 专为算法竞赛打造 | 持续更新中</p>
+  <p style="font-size:0.8rem;margin-top:8px;">👻 胡桃主题 · 洛谷 / Codeforces / AtCoder 例题持续收录 · 建议收藏以便随时查阅</p>
 </footer>
 
 </main>
@@ -1921,16 +2154,91 @@ template&lt;typename T&gt; ostream&amp; operator&lt;&lt;(ostream &amp;os, const 
 <div id="toastContainer"></div>
 
 <script>
+// ===== Daily Problem Pool (shared with algo.html) =====
+const DAILY_PROBLEMS = [
+  { title:'P1177 【模板】排序',algo:'排序',diff:'入门',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1177',desc:'快速排序模板题，使用 sort() 完成' },
+  { title:'P1908 逆序对',algo:'排序/归并',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1908',desc:'归并排序求逆序对，经典分治思想' },
+  { title:'P2249 【深基13.例1】查找',algo:'二分',diff:'入门',source:'洛谷',url:'https://www.luogu.com.cn/problem/P2249',desc:'标准二分查找模板题' },
+  { title:'P1873 [COCI] 砍树',algo:'二分答案',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1873',desc:'二分答案基础题，理解 check 函数' },
+  { title:'P2678 [NOIP2015] 跳石头',algo:'二分答案',diff:'普及/提高−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P2678',desc:'经典二分答案，"最大值最小化"' },
+  { title:'P8218 【深进1.例1】求区间和',algo:'前缀和',diff:'入门',source:'洛谷',url:'https://www.luogu.com.cn/problem/P8218',desc:'前缀和模板题' },
+  { title:'P2367 语文成绩',algo:'差分',diff:'入门',source:'洛谷',url:'https://www.luogu.com.cn/problem/P2367',desc:'差分数组模板题' },
+  { title:'P1102 A-B 数对',algo:'双指针',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1102',desc:'双指针/哈希表计数经典题' },
+  { title:'P1638 逛画展',algo:'滑动窗口',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1638',desc:'最短区间覆盖所有种类' },
+  { title:'P1115 最大子段和',algo:'DP',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1115',desc:'线性 DP 入门，O(n) 经典' },
+  { title:'P1020 [NOIP1999] 导弹拦截',algo:'DP/LIS',diff:'普及/提高−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1020',desc:'Dilworth 定理经典应用' },
+  { title:'P1048 [NOIP2005] 采药',algo:'01背包',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1048',desc:'01背包模板，经典入門' },
+  { title:'P1616 疯狂的采药',algo:'完全背包',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1616',desc:'完全背包模板' },
+  { title:'P1605 迷宫',algo:'DFS',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1605',desc:'DFS 计数所有路径' },
+  { title:'P1443 马的遍历',algo:'BFS',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1443',desc:'BFS 模板题，queue 经典应用' },
+  { title:'P3367 【模板】并查集',algo:'并查集',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P3367',desc:'并查集模板，路径压缩' },
+  { title:'P1111 修复公路',algo:'并查集',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1111',desc:'DSU + 排序判断连通时间' },
+  { title:'P1226 【模板】快速幂',algo:'快速幂',diff:'入门',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1226',desc:'快速幂模板，理解二进制拆分' },
+  { title:'P1029 最大公约数和最小公倍数问题',algo:'GCD/LCM',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1029',desc:'辗转相除法 + LCM' },
+  { title:'P3383 【模板】线性筛素数',algo:'素数筛',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P3383',desc:'欧拉筛模板' },
+  { title:'P1090 [NOIP2004] 合并果子',algo:'贪心',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1090',desc:'哈夫曼树，小根堆贪心' },
+  { title:'P1803 凌乱的yyy',algo:'贪心/区间调度',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1803',desc:'区间调度模板' },
+  { title:'P5019 [NOIP2018] 铺设道路',algo:'贪心',diff:'普及/提高−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P5019',desc:'差分贪心，NOIP 真题' },
+  { title:'P4779 【模板】单源最短路径',algo:'Dijkstra',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P4779',desc:'Dijkstra 堆优化标准模板' },
+  { title:'P1629 邮递员送信',algo:'Dijkstra',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1629',desc:'正反图两次 Dijkstra' },
+  { title:'P3370 【模板】字符串哈希',algo:'字符串哈希',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P3370',desc:'字符串哈希判重模板' },
+  { title:'P3375 【模板】KMP',algo:'KMP',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P3375',desc:'KMP 模板，理解 next 数组' },
+  { title:'P1886 滑动窗口/单调队列',algo:'单调队列',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1886',desc:'deque 实现单调队列模板' },
+  { title:'P1168 中位数',algo:'对顶堆',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1168',desc:'两个 priority_queue 维护中位数' },
+  { title:'NC16619 跳台阶',algo:'DP',diff:'入门',source:'牛客',url:'https://ac.nowcoder.com/acm/problem/16619',desc:'斐波那契 DP 入门' },
+  { title:'NC15172 逃离迷宫',algo:'BFS',diff:'中等',source:'牛客',url:'https://ac.nowcoder.com/acm/problem/15172',desc:'BFS 最短路变种' },
+  { title:'P1923 求第 k 小的数',algo:'快速选择',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1923',desc:'nth_element 或手写快速选择' },
+  { title:'P2440 木材加工',algo:'二分答案',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P2440',desc:'二分答案求最大值' },
+  { title:'P3397 地毯',algo:'二维差分',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P3397',desc:'二维差分模板' },
+  { title:'P1147 连续自然数和',algo:'双指针',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1147',desc:'滑动窗口求连续和' },
+  { title:'P1219 [USACO1.5] 八皇后',algo:'DFS回溯',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1219',desc:'经典回溯法，对角线判断' },
+  { title:'P1525 [NOIP2010] 关押罪犯',algo:'扩展域并查集',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1525',desc:'扩展域 DSU 经典应用' },
+  { title:'P1082 [NOIP2012] 同余方程',algo:'扩欧',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1082',desc:'扩展欧几里得求逆元' },
+  { title:'P2758 编辑距离',algo:'DP',diff:'普及+/提高',source:'洛谷',url:'https://www.luogu.com.cn/problem/P2758',desc:'经典字符串 DP' },
+  { title:'P1164 小A点菜',algo:'背包计数',diff:'普及−',source:'洛谷',url:'https://www.luogu.com.cn/problem/P1164',desc:'01背包方案数统计' },
+  { title:'NC24866 完全平方数',algo:'二分',diff:'中等',source:'牛客',url:'https://ac.nowcoder.com/acm/problem/24866',desc:'二分求解满足条件的最小值' },
+];
+
+function pickDailyProblem() {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
+  const reroll = parseInt(localStorage.getItem('daily-reroll-index-' + seed) || '0');
+  const idx = (seed * 131 + reroll * 9973) % DAILY_PROBLEMS.length;
+  const p = DAILY_PROBLEMS[idx];
+
+  const els = {
+    dailyTitle: document.getElementById('dailyTitle'),
+    dailyAlgo: document.getElementById('dailyAlgo'),
+    dailyDiff: document.getElementById('dailyDiff'),
+    dailySource: document.getElementById('dailySource'),
+    dailyDesc: document.getElementById('dailyDesc'),
+    dailyLink: document.getElementById('dailyLink'),
+  };
+  if (els.dailyTitle) els.dailyTitle.textContent = p.title;
+  if (els.dailyAlgo) els.dailyAlgo.textContent = p.algo;
+  if (els.dailyDiff) els.dailyDiff.textContent = p.diff;
+  if (els.dailySource) els.dailySource.textContent = p.source;
+  if (els.dailyDesc) els.dailyDesc.textContent = p.desc;
+  if (els.dailyLink) els.dailyLink.href = p.url;
+
+  localStorage.setItem('daily-reroll-index-' + seed, reroll + 1);
+}
+
 // ===== Theme Toggle =====
+// Default: light theme (no data-theme attribute → :root light CSS)
+// Click 🔥 to switch to Hu Tao dark mode
 function toggleTheme() {
   const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('stl-guide-theme', next);
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');   // back to light
+  } else {
+    html.setAttribute('data-theme', 'dark');
+  }
+  document.querySelector('.theme-toggle').textContent = isDark ? '🔥' : '👻';
 }
-const saved = localStorage.getItem('stl-guide-theme');
-if (saved) document.documentElement.setAttribute('data-theme', saved);
+// Always start light
+document.documentElement.removeAttribute('data-theme');
 
 // ===== Collapsible =====
 function toggleCollapse(btn) {
@@ -2000,7 +2308,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.3 });
 document.querySelectorAll('[data-container]').forEach(s => observer.observe(s));
 
-// ===== Particles Background =====
+// ===== Hu Tao Themed Particles: Fire Embers + Butterflies =====
 (function particles() {
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
@@ -2013,43 +2321,127 @@ document.querySelectorAll('[data-container]').forEach(s => observer.observe(s));
   resize();
   window.addEventListener('resize', resize);
 
-  const N = 60;
+  const N = 65;
+  // Create ember particles and butterfly particles
   for (let i = 0; i < N; i++) {
+    const isButterfly = i < 8; // 8 butterflies
     particles.push({
-      x: Math.random() * w, y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      r: Math.random() * 2 + 1,
-      alpha: Math.random() * 0.3 + 0.1
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * (isButterfly ? 0.35 : 0.6),
+      vy: (Math.random() - 0.5) * (isButterfly ? 0.3 : 0.45) - (isButterfly ? 0.15 : 0.25),
+      r: isButterfly ? 5 + Math.random() * 4 : 0.8 + Math.random() * 2.2,
+      alpha: isButterfly ? 0.18 + Math.random() * 0.22 : 0.12 + Math.random() * 0.25,
+      type: isButterfly ? 'butterfly' : 'ember',
+      phase: Math.random() * Math.PI * 2,
+      wingPhase: Math.random() * Math.PI * 2,
+      colorIndex: Math.floor(Math.random() * 3)
     });
+  }
+
+  // Ember colors — Hu Tao fire palette
+  const emberColors = [
+    { r: 224, g: 68, b: 68 },   // crimson red
+    { r: 255, g: 94, b: 58 },   // pyro orange
+    { r: 212, g: 160, b: 23 },  // gold
+  ];
+
+  function drawButterfly(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    const wingAngle = Math.sin(p.wingPhase) * 0.4;
+    const scale = p.r / 8;
+
+    // Upper wings
+    ctx.beginPath();
+    ctx.ellipse(-3 * scale, -1 * scale, 3.5 * scale, 2.8 * scale, -0.3 + wingAngle, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(224, 68, 68, ${p.alpha * 1.1})`;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.ellipse(3 * scale, -1 * scale, 3.5 * scale, 2.8 * scale, 0.3 - wingAngle, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(224, 68, 68, ${p.alpha * 1.1})`;
+    ctx.fill();
+
+    // Lower wings (smaller)
+    ctx.beginPath();
+    ctx.ellipse(-2 * scale, 2.5 * scale, 2.2 * scale, 1.8 * scale, 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212, 160, 23, ${p.alpha * 0.9})`;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.ellipse(2 * scale, 2.5 * scale, 2.2 * scale, 1.8 * scale, -0.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212, 160, 23, ${p.alpha * 0.9})`;
+    ctx.fill();
+
+    // Body
+    ctx.beginPath();
+    ctx.ellipse(0, 0.5 * scale, 0.8 * scale, 2.5 * scale, 0, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(180, 100, 60, ${p.alpha * 1.2})`;
+    ctx.fill();
+
+    // Gold antennae dots
+    ctx.beginPath();
+    ctx.arc(0, -3.8 * scale, 0.6 * scale, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 200, 80, ${p.alpha * 1.3})`;
+    ctx.fill();
+
+    ctx.restore();
   }
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    const isDark = !document.documentElement.getAttribute('data-theme') ||
-                    document.documentElement.getAttribute('data-theme') === 'dark';
-    const color = isDark ? '56, 189, 248' : '100, 116, 139';
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
     particles.forEach((p, i) => {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${color}, ${p.alpha})`;
-      ctx.fill();
+      // Move upward (embers rise like fire)
+      p.x += p.vx;
+      p.y += p.vy;
+      p.wingPhase += p.type === 'butterfly' ? 0.025 : 0;
 
-      // Draw connections
+      // Wrap around
+      if (p.x < -30) p.x = w + 30;
+      if (p.x > w + 30) p.x = -30;
+      if (p.y < -30) p.y = h + 30;
+      if (p.y > h + 30) p.y = -30;
+
+      if (p.type === 'butterfly') {
+        drawButterfly(p);
+      } else {
+        // Ember — brighter on dark, subtle on light
+        const c = emberColors[p.colorIndex];
+        const baseAlpha = isDark ? p.alpha : p.alpha * 0.35;
+        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+        glow.addColorStop(0, `rgba(${c.r},${c.g},${c.b},${baseAlpha})`);
+        glow.addColorStop(0.4, `rgba(${c.r},${c.g},${c.b},${baseAlpha * 0.5})`);
+        glow.addColorStop(1, `rgba(${c.r},${c.g},${c.b},0)`);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+        ctx.fillStyle = glow;
+        ctx.fill();
+
+        // Core — brighter on dark
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = isDark
+          ? `rgba(255, 220, 180, ${p.alpha * 1.3})`
+          : `rgba(192, 80, 50, ${p.alpha * 0.4})`;
+        ctx.fill();
+      }
+
+      // Connection lines
+      const connColor = isDark ? '224, 68, 68' : '192, 57, 43';
       for (let j = i + 1; j < N; j++) {
         const dx = p.x - particles[j].x;
         const dy = p.y - particles[j].y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 150) {
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140) {
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(${color}, ${0.06 * (1 - dist / 150)})`;
-          ctx.lineWidth = 0.5;
+          const connAlpha = 0.05 * (1 - dist / 140);
+          ctx.strokeStyle = `rgba(${connColor}, ${connAlpha})`;
+          ctx.lineWidth = 0.4;
           ctx.stroke();
         }
       }
@@ -2070,6 +2462,34 @@ window.addEventListener('scroll', () => {
   btn.classList.toggle('visible', scrollTop > 400);
 });
 
+// ===== Hu Tao Mascot Click =====
+(function() {
+  const mascot = document.getElementById('hutaoMascot');
+  if (!mascot) return;
+  const lines = [
+    '大丘丘病了二丘丘瞧，三丘丘采药四丘丘熬～ 🎵',
+    '往生堂第七十七代堂主，就是胡桃我啦！ 👻',
+    '阴阳有序，命运无常。',
+    '吃饱喝饱，一路走好！ 🦋',
+    '需要棺材吗？给你打八折哦～',
+    '蝶引来生，阴阳有序。',
+    '太阳出来我晒太阳，月亮出来我晒月亮咯～ ☀️',
+    '有业务吗？没有的话我走啦～',
+    '本堂主在此，邪祟退散！ 🔥',
+    '你看这个幽灵，多可爱呀～ 👻',
+  ];
+  mascot.addEventListener('click', () => {
+    const line = lines[Math.floor(Math.random() * lines.length)];
+    showToast(line);
+    mascot.style.animation = 'none';
+    void mascot.offsetWidth;
+    mascot.style.animation = 'mascotFloat 0.6s ease';
+    setTimeout(() => {
+      mascot.style.animation = 'mascotFloat 3.5s ease-in-out infinite';
+    }, 600);
+  });
+})();
+
 // ===== Reveal animation on scroll =====
 const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
@@ -2083,6 +2503,31 @@ document.querySelectorAll('.info-card, .problem-card, .tip-box, .collapsible').f
   el.style.opacity = '0';
   revealObserver.observe(el);
 });
+
+// ===== Hu Tao Mascot Click =====
+(function() {
+  const mascot = document.getElementById('hutaoMascot');
+  if (!mascot) return;
+  const lines = [
+    '大丘丘病了二丘丘瞧，三丘丘采药四丘丘熬～ 🎵',
+    '往生堂第七十七代堂主，就是胡桃我啦！ 👻',
+    '阴阳有序，命运无常。',
+    '吃饱喝饱，一路走好！ 🦋',
+    '需要棺材吗？给你打八折哦～',
+    '蝶引来生，阴阳有序。',
+    '太阳出来我晒太阳，月亮出来我晒月亮咯～ ☀️',
+    '加油学 STL！本堂主看好你哦～ 🔥',
+    '本堂主在此，邪祟退散！ 🔥',
+    '你看这个幽灵，多可爱呀～ 👻',
+  ];
+  mascot.addEventListener('click', () => {
+    const line = lines[Math.floor(Math.random() * lines.length)];
+    showToast(line);
+  });
+})();
+
+// Init daily problem on page load
+pickDailyProblem();
 </script>
 
 </body>
