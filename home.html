@@ -38,7 +38,7 @@ body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;backgroun
 .gate-section h2{text-align:center;font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:10px}
 .gate-section h2 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .gate-subtitle{text-align:center;color:var(--text-secondary);margin-bottom:40px;font-size:.9rem}
-.gate-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;max-width:750px;margin:0 auto}
+.gate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto}
 .gate-card{position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;background:var(--card-bg);border:1px solid var(--border);transition:all .5s cubic-bezier(.4,0,.2,1);box-shadow:0 4px 24px rgba(0,0,0,.04)}
 [data-theme="dark"] .gate-card{box-shadow:0 4px 24px rgba(0,0,0,.3)}
 .gate-card:hover{transform:translateY(-6px);border-color:var(--accent);box-shadow:0 12px 40px rgba(192,57,43,0.1)}
@@ -64,7 +64,7 @@ body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;backgroun
 @keyframes ghostF{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px) rotate(-6deg)}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:20px;background:linear-gradient(135deg,#c0392b,#e85d3a);color:#fff;font-weight:600;font-size:.85rem;z-index:9999;animation:toastIn .3s ease,toastOut .3s ease 1.7s forwards}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes toastOut{from{opacity:1}to{opacity:0}}
-@media(max-width:768px){.gate-grid{grid-template-columns:1fr}.hero h1{font-size:2rem}}
+@media(max-width:900px){.gate-grid{grid-template-columns:1fr}.hero h1{font-size:2rem}}
 @media(max-width:640px){.hutao-mascot{display:none}}
 </style>
 </head>
@@ -74,8 +74,9 @@ body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;backgroun
 <nav class="navbar">
   <div class="logo">🦋 往生堂 · 算法阁</div>
   <div class="nav-links">
-    <a href="index.html">📦 STL 容器</a>
-    <a href="algo.html">📖 算法笔记</a>
+    <a href="index.html">📦 STL</a>
+    <a href="algo.html">📖 算法</a>
+    <a href="ds.html">🏗️ 数据结构</a>
   </div>
   <button class="theme-toggle" onclick="toggleTheme()" title="切换主题">🔥</button>
 </nav>
@@ -93,7 +94,7 @@ body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;backgroun
 
 <section class="gate-section">
   <h2>择一 <span>门</span> 而入</h2>
-  <p class="gate-subtitle">两本秘籍，助你从入门到精通</p>
+  <p class="gate-subtitle">三本秘籍，助你从入门到精通</p>
   <div class="gate-grid">
     <a class="gate-card" href="index.html">
       <div class="gate-card-image">📦</div>
@@ -111,8 +112,19 @@ body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;backgroun
       <div class="gate-card-body">
         <div>
           <h3>算法学习笔记</h3>
-          <p class="tagline">12 大算法专题，手写模板 + 经典例题 + 每日一题 + 学习心得笔记本。</p>
-          <div class="features"><span class="feature-tag">🔢 排序/二分</span><span class="feature-tag">🧩 DP/背包</span><span class="feature-tag">🌐 DFS/BFS</span><span class="feature-tag">🛣️ 最短路</span><span class="feature-tag">📅 每日一题</span></div>
+          <p class="tagline">12 大算法专题，手写模板 + 经典例题 + 每日一题。</p>
+          <div class="features"><span class="feature-tag">🔢 排序/二分</span><span class="feature-tag">🧩 DP/背包</span><span class="feature-tag">🌐 DFS/BFS</span><span class="feature-tag">📅 每日一题</span></div>
+        </div>
+        <span class="cta">开始学习 →</span>
+      </div>
+    </a>
+    <a class="gate-card" href="ds.html">
+      <div class="gate-card-image">🏗️</div>
+      <div class="gate-card-body">
+        <div>
+          <h3>数据结构笔记</h3>
+          <p class="tagline">11 种核心数据结构，手写实现 + 底层原理 + 经典例题。</p>
+          <div class="features"><span class="feature-tag">🔗 链表/栈/队列</span><span class="feature-tag">🌳 树/堆/Trie</span><span class="feature-tag">📊 BIT</span><span class="feature-tag">📅 每日一题</span></div>
         </div>
         <span class="cta">开始学习 →</span>
       </div>
