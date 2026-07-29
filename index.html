@@ -449,6 +449,7 @@ body {
   <a href="#pair"><span class="emoji">👫</span><span>pair/tuple</span></a>
   <a href="#string"><span class="emoji">📝</span><span>string</span></a>
   <a href="#algo"><span class="emoji">🔧</span><span>常用算法</span></a>
+  <a href="#macros"><span class="emoji">⚙️</span><span>竞赛宏模板</span></a>
 </div>
 
 <!-- ============================================================ -->
@@ -1793,7 +1794,88 @@ int cnt = count_if(a.begin(), a.end(), [](int x){ return x>0; });
 </section>
 
 <!-- ============================================================ -->
-<!-- COMPARISON TABLE -->
+<!-- MACROS -->
+<!-- ============================================================ -->
+<section class="section" id="macros" data-container>
+  <div class="section-header">
+    <div class="icon">⚙️</div>
+    <div><h2>竞赛常用宏定义 & 编译优化</h2></div>
+    <span class="badge">#pragma / #define</span>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h4>🔬 为什么用宏</h4>
+      <p>竞赛代码追求<strong>简洁高效</strong>。宏可以大幅减少重复代码，让你专注于算法本身。配合 <code>#pragma</code> 编译指令可以开启编译器优化、加速 IO。</p>
+    </div>
+    <div class="info-card">
+      <h4>💡 竞赛要点</h4>
+      <p>一套好用的宏模板能在比赛中节省大量打字时间。最常用的：<code>for</code> 循环简写、<code>#define int long long</code>、快读快写。注意：别用得太花哨，要保证代码可读性。</p>
+    </div>
+  </div>
+
+  <div class="collapsible">
+    <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 竞赛代码模板 <span class="arrow">▼</span></button>
+    <div class="collapsible-content">
+<div class="code-wrapper">
+<div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+<pre class="code-block">// ===== 编译优化（放在文件开头）=====
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+#pragma GCC target("avx2")
+
+#include &lt;bits/stdc++.h&gt;  // 万能头文件
+using namespace std;
+
+// ===== 类型别名 =====
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair&lt;int,int&gt; pii;
+typedef pair&lt;ll,ll&gt; pll;
+#define vi vector&lt;int&gt;
+#define vl vector&lt;ll&gt;
+#define vvi vector&lt;vi&gt;
+
+// ===== 常用宏 =====
+#define rep(i,a,b) for(int i=(a);i&lt;(b);i++)
+#define per(i,a,b) for(int i=(b)-1;i&gt;=(a);i--)
+#define all(x) (x).begin(),(x).end()
+#define sz(x) (int)(x).size()
+#define pb push_back
+#define fi first
+#define se second
+
+// ===== 快速 IO（必须在使用 cin/cout 前调用）=====
+void fastIO() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    // cout &lt;&lt; fixed &lt;&lt; setprecision(10);  // 需要精度时打开
+}
+
+// ===== 常用函数 =====
+template&lt;typename T&gt; void chmax(T &amp;a, T b) { a = max(a, b); }
+template&lt;typename T&gt; void chmin(T &amp;a, T b) { a = min(a, b); }
+template&lt;typename T&gt; ostream&amp; operator&lt;&lt;(ostream &amp;os, const vector&lt;T&gt; &amp;v)
+    { for (auto &amp;x : v) os &lt;&lt; x &lt;&lt; ' '; return os; }
+
+// ===== 谨慎使用：int 换 long long =====
+// #define int long long  // 注意：main 要改成 signed main()
+</pre>
+</div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>🏆 竞赛技巧：</strong> <code>#define int long long</code> 可以避免忘记开 long long 导致 WA，但会增加内存和运行时间。建议在确定会爆 int 时才开。<code>#pragma GCC optimize("O3")</code> 能显著加速 STL 操作，但部分 OJ 会忽略或报 Warning。快读快写对大数据量题目（10^6 级别）效果明显。
+  </div>
+
+  <div class="tip-box warning">
+    <strong>⚠️ 注意：</strong> <code>#include &lt;bits/stdc++.h&gt;</code> 是 GCC 专属，MSVC 不支持。绝大多数 OJ 用 GCC 编译器所以没问题。另外 <code>#define int long long</code> 后 <code>main()</code> 会报错，必须写成 <code>signed main()</code>。
+  </div>
+</section>
+
+<!-- ============================================================ -->
 <!-- ============================================================ -->
 <section class="section" id="summary">
   <div class="section-header">
