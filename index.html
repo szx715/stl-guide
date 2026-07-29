@@ -344,6 +344,28 @@ body {
 }
 .toc-dot:hover .toc-tooltip { opacity: 1; }
 
+/* ===== Scroll Progress Bar ===== */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8, #f472b6);
+  z-index: 1001; transition: width 0.1s linear;
+}
+
+/* ===== Back to Top ===== */
+.back-to-top {
+  position: fixed; bottom: 32px; right: 32px; z-index: 999;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--gradient-1); color: #fff; border: none;
+  font-size: 1.3rem; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(56,189,248,0.4);
+  opacity: 0; transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(56,189,248,0.5); }
+
 /* ===== Footer ===== */
 .footer {
   text-align: center; padding: 40px; color: var(--text-secondary);
@@ -375,6 +397,11 @@ body {
 </head>
 <body>
 
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">⬆</button>
+
 <canvas id="particles"></canvas>
 
 <!-- ===== Navbar ===== -->
@@ -400,8 +427,8 @@ body {
   <h1>C++ STL 容器完全指南</h1>
   <p class="subtitle">专为算法竞赛打造的 STL 容器速查手册 — 涵盖底层实现、时间复杂度、常用操作与经典例题</p>
   <div class="hero-stats">
-    <div class="stat-item"><div class="stat-number">13</div><div class="stat-label">核心容器</div></div>
-    <div class="stat-item"><div class="stat-number">30+</div><div class="stat-label">经典例题</div></div>
+    <div class="stat-item"><div class="stat-number">14</div><div class="stat-label">核心容器</div></div>
+    <div class="stat-item"><div class="stat-number">32+</div><div class="stat-label">经典例题</div></div>
     <div class="stat-item"><div class="stat-number">O(·)</div><div class="stat-label">复杂度分析</div></div>
   </div>
 </section>
@@ -417,6 +444,7 @@ body {
   <a href="#set"><span class="emoji">🌳</span><span>set</span></a>
   <a href="#map"><span class="emoji">🗺️</span><span>map</span></a>
   <a href="#unordered"><span class="emoji">⚡</span><span>unordered_*</span></a>
+  <a href="#pbds"><span class="emoji">🚀</span><span>pb_ds</span></a>
   <a href="#bitset"><span class="emoji">🧮</span><span>bitset</span></a>
   <a href="#pair"><span class="emoji">👫</span><span>pair/tuple</span></a>
   <a href="#string"><span class="emoji">📝</span><span>string</span></a>
@@ -1363,6 +1391,112 @@ int next = bs._Find_next(5);    // 5 之后第一个 1 的位置 (GCC)
 </section>
 
 <!-- ============================================================ -->
+<!-- PB_DS -->
+<!-- ============================================================ -->
+<section class="section" id="pbds" data-container>
+  <div class="section-header">
+    <div class="icon">🚀</div>
+    <div><h2>pb_ds — GNU 扩展数据结构</h2></div>
+    <span class="badge">#include &lt;ext/pb_ds/...&gt;</span>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h4>🔬 底层实现</h4>
+      <p><strong>GNU C++ 扩展库</strong>（Policy-Based Data Structures），提供标准库之外的高性能数据结构：哈希表（gp_hash_table，比 unordered_map 快且防卡）、平衡树（tree，支持查第 k 小和排名）、Trie 树等。Codeforces 等平台通常支持。</p>
+    </div>
+    <div class="info-card">
+      <h4>💡 竞赛要点</h4>
+      <p>竞赛中两大神技：(1) <strong>gp_hash_table</strong> 替代 unordered_map，不会被卡哈希；(2) <strong>ordered_set</strong>（tree）可以在 O(log n) 内完成 set 的所有操作 + 查第 k 小 + 查元素排名。注意：洛谷等部分 OJ 不支持 pb_ds。</p>
+    </div>
+  </div>
+
+  <div class="collapsible">
+    <button class="collapsible-trigger" onclick="toggleCollapse(this)">📋 ordered_set 模板 — 支持 rank 和 kth 的平衡树 <span class="arrow">▼</span></button>
+    <div class="collapsible-content">
+<div class="code-wrapper">
+<div class="code-header"><span class="lang">C++</span><button class="copy-btn" onclick="copyCode(this)">📋 复制</button></div>
+<pre class="code-block">#include &lt;ext/pb_ds/assoc_container.hpp&gt;
+#include &lt;ext/pb_ds/tree_policy.hpp&gt;
+#include &lt;ext/pb_ds/hash_policy.hpp&gt;
+using namespace __gnu_pbds;
+
+// === ordered_set: 支持 find_by_order 和 order_of_key ===
+// 本质是红黑树，用法类似 set，但额外支持：
+//   - find_by_order(k): 返回第 k 小的迭代器 (0-indexed)  O(log n)
+//   - order_of_key(x):  返回 < x 的元素个数 (即排名)    O(log n)
+typedef tree&lt;
+    int,                      // 键类型
+    null_type,                // 无映射值 (set 模式)
+    less&lt;int&gt;,                // 比较器
+    rb_tree_tag,              // 红黑树
+    tree_order_statistics_node_update // 开启排名统计
+&gt; ordered_set;
+
+// 使用示例
+ordered_set os;
+os.insert(5); os.insert(2); os.insert(8); os.insert(3);
+// os = {2, 3, 5, 8}
+cout &lt;&lt; *os.find_by_order(2);        // 5 (第 2 小，0-indexed)
+cout &lt;&lt; os.order_of_key(6);           // 3 (有 3 个数 < 6: 2,3,5)
+
+// === 多重集版本（允许重复元素）===
+typedef tree&lt;
+    pair&lt;int,int&gt;,  // {值, 唯一ID} 来区分重复元素
+    null_type,
+    less&lt;pair&lt;int,int&gt;&gt;,
+    rb_tree_tag,
+    tree_order_statistics_node_update
+&gt; ordered_multiset;
+
+// === gp_hash_table: 比 unordered_map 更快更安全 ===
+#include &lt;ext/pb_ds/assoc_container.hpp&gt;
+using namespace __gnu_pbds;
+gp_hash_table&lt;int, int&gt; mp;  // 替代 unordered_map，防卡哈希！
+
+// 链地址法哈希表（标准拉链）
+cc_hash_table&lt;int, int&gt; mp2;
+</pre>
+</div>
+    </div>
+  </div>
+
+  <table class="complexity-table">
+    <thead><tr><th>操作</th><th>ordered_set</th><th>gp_hash_table</th></tr></thead>
+    <tbody>
+      <tr><td class="op">insert / erase / find</td><td class="comp">O(log n)</td><td class="comp">O(1) 均摊</td></tr>
+      <tr><td class="op">find_by_order(k)</td><td class="comp">O(log n)</td><td class="comp">不支持</td></tr>
+      <tr><td class="op">order_of_key(x)</td><td class="comp">O(log n)</td><td class="comp">不支持</td></tr>
+      <tr><td class="op">lower_bound / upper_bound</td><td class="comp">O(log n)</td><td class="comp">不支持</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip-box success">
+    <strong>🏆 竞赛技巧：</strong> <code>order_of_key()</code> 可以轻松求逆序对（遍历 + 查询比当前数大的个数）。<code>find_by_order()</code> 可用于动态维护中位数。如果题目需要同时支持 set 的去重 + 第 k 小查询，ordered_set 是最快的选择，比手写 Treap/Splay 方便得多。
+  </div>
+
+  <div class="tip-box warning">
+    <strong>⚠️ 注意：</strong> pb_ds 是 GCC 专属扩展，<strong>洛谷 / 牛客</strong>等国内 OJ 大多不支持！<strong>Codeforces / AtCoder</strong> 支持。提交前确认平台编译器。另外 <code>tree_order_statistics_node_update</code> 不支持多重集，需要配合 pair 使用。
+  </div>
+
+  <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+  <div class="problems-grid">
+    <a class="problem-card" href="https://codeforces.com/problemset/problem/1579/E2" target="_blank" rel="noopener">
+      <span class="source source-cf">Codeforces</span>
+      <h5>1579E2 Array Optimization by Deque</h5>
+      <p class="desc">ordered_set 求逆序对，完美展示 order_of_key 用法。</p>
+      <span class="link-icon">↗</span>
+    </a>
+    <a class="problem-card" href="https://codeforces.com/problemset/problem/1354/D" target="_blank" rel="noopener">
+      <span class="source source-cf">Codeforces</span>
+      <h5>1354D Multiset</h5>
+      <p class="desc">ordered_set 的 find_by_order 求第 k 小，红黑树模板题。</p>
+      <span class="link-icon">↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================ -->
 <!-- PAIR / TUPLE -->
 <!-- ============================================================ -->
 <section class="section" id="pair" data-container>
@@ -1842,6 +1976,17 @@ document.querySelectorAll('[data-container]').forEach(s => observer.observe(s));
   }
   draw();
 })();
+
+// ===== Scroll Progress Bar =====
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+  // Back to top button
+  const btn = document.getElementById('backToTop');
+  btn.classList.toggle('visible', scrollTop > 400);
+});
 
 // ===== Reveal animation on scroll =====
 const revealObserver = new IntersectionObserver(entries => {
