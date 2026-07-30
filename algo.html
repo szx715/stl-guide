@@ -777,7 +777,70 @@ ll mergeSort(vector<int>&a,int l,int r){
         </div>
       </div>
       <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 日常直接用 <code>sort(a.begin(), a.end())</code> 即可。只有需要统计<strong>逆序对</strong>时才手写归并排序。C++17 后可以用 <code>stable_sort()</code> 做稳定排序。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：排序算法 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：排序算法</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：整理扑克牌</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">你左手拿一堆乱序的牌，右手一张张抽出来<strong>插入</strong>左手已排好的位置 — 这是<strong>插入排序 O(n²)</strong>。<br>快速排序更像<strong>分拣</strong>：选一张"基准牌(pivot)"，比它小的放左边、大的放右边，左右各自递归处理——这就是<strong>分治(Divide & Conquer)</strong>思想。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 700 230" width="100%" style="max-width:700px;display:block;margin:0 auto;">
+              <defs><marker id="aS1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+              <text x="350" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">pivot = 4（选中间元素作为基准）</text>
+              <text x="8" y="44" fill="#8b5e3c" font-size="11">原数组:</text>
+              <rect x="65" y="28" width="36" height="24" rx="5" fill="none" stroke="#e8d5c8" stroke-width="1.5"/><text x="83" y="44" text-anchor="middle" fill="#3d2020" font-size="12" font-weight="bold">3</text>
+              <rect x="105" y="28" width="36" height="24" rx="5" fill="none" stroke="#e8d5c8" stroke-width="1.5"/><text x="123" y="44" text-anchor="middle" fill="#3d2020" font-size="12" font-weight="bold">7</text>
+              <rect x="145" y="28" width="36" height="24" rx="5" fill="none" stroke="#e8d5c8" stroke-width="1.5"/><text x="163" y="44" text-anchor="middle" fill="#3d2020" font-size="12" font-weight="bold">1</text>
+              <rect x="185" y="28" width="36" height="24" rx="5" fill="#c0392b" stroke="#c0392b" stroke-width="2"/><text x="203" y="44" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">4</text>
+              <rect x="225" y="28" width="36" height="24" rx="5" fill="none" stroke="#e8d5c8" stroke-width="1.5"/><text x="243" y="44" text-anchor="middle" fill="#3d2020" font-size="12" font-weight="bold">6</text>
+              <rect x="265" y="28" width="36" height="24" rx="5" fill="none" stroke="#e8d5c8" stroke-width="1.5"/><text x="283" y="44" text-anchor="middle" fill="#3d2020" font-size="12" font-weight="bold">2</text>
+              <rect x="305" y="28" width="36" height="24" rx="5" fill="none" stroke="#e8d5c8" stroke-width="1.5"/><text x="323" y="44" text-anchor="middle" fill="#3d2020" font-size="12" font-weight="bold">5</text>
+              <line x1="195" y1="58" x2="195" y2="74" stroke="#c0392b" stroke-width="1.5" marker-end="url(#aS1)"/>
+              <text x="80" y="74" fill="#c0392b" font-size="10">i 向右找 ≥ pivot</text><text x="240" y="74" fill="#c0392b" font-size="10">j 向左找 ≤ pivot</text>
+              <text x="8" y="100" fill="#8b5e3c" font-size="11">分区后:</text>
+              <rect x="65" y="84" width="36" height="24" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="83" y="100" text-anchor="middle" fill="#27ae60" font-size="12" font-weight="bold">3</text>
+              <rect x="105" y="84" width="36" height="24" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="123" y="100" text-anchor="middle" fill="#27ae60" font-size="12" font-weight="bold">1</text>
+              <rect x="145" y="84" width="36" height="24" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="163" y="100" text-anchor="middle" fill="#27ae60" font-size="12" font-weight="bold">2</text>
+              <rect x="198" y="84" width="36" height="24" rx="5" fill="#c0392b" stroke="#c0392b" stroke-width="2"/><text x="216" y="100" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">4</text>
+              <rect x="248" y="84" width="36" height="24" rx="5" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="266" y="100" text-anchor="middle" fill="#e74c3c" font-size="12" font-weight="bold">7</text>
+              <rect x="288" y="84" width="36" height="24" rx="5" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="306" y="100" text-anchor="middle" fill="#e74c3c" font-size="12" font-weight="bold">6</text>
+              <rect x="328" y="84" width="36" height="24" rx="5" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="346" y="100" text-anchor="middle" fill="#e74c3c" font-size="12" font-weight="bold">5</text>
+              <text x="163" y="128" text-anchor="middle" fill="#27ae60" font-size="10">&lt; pivot（递归排左边）</text>
+              <text x="308" y="128" text-anchor="middle" fill="#e74c3c" font-size="10">&gt; pivot（递归排右边）</text>
+              <text x="216" y="152" text-anchor="middle" fill="#8b5e3c" font-size="10">pivot 已就位 ✓</text>
+              <rect x="65" y="168" width="36" height="22" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="83" y="183" text-anchor="middle" fill="#27ae60" font-size="11">1</text>
+              <rect x="105" y="168" width="36" height="22" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="123" y="183" text-anchor="middle" fill="#27ae60" font-size="11">2</text>
+              <rect x="145" y="168" width="36" height="22" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="163" y="183" text-anchor="middle" fill="#27ae60" font-size="11">3</text>
+              <rect x="248" y="168" width="36" height="22" rx="5" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="266" y="183" text-anchor="middle" fill="#e74c3c" font-size="11">5</text>
+              <rect x="288" y="168" width="36" height="22" rx="5" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="306" y="183" text-anchor="middle" fill="#e74c3c" font-size="11">6</text>
+              <rect x="328" y="168" width="36" height="22" rx="5" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="346" y="183" text-anchor="middle" fill="#e74c3c" font-size="11">7</text>
+              <text x="163" y="218" text-anchor="middle" fill="#27ae60" font-size="11">✅ 有序！</text><text x="308" y="218" text-anchor="middle" fill="#e74c3c" font-size="11">✅ 有序！</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>题目：</strong>数组 <code>[3, 1, 4, 2]</code>，求逆序对个数（i&lt;j 但 a[i]&gt;a[j]）。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>第一步 — 暴力法：</strong>两重循环枚举所有 (i,j) pair，O(n²)。n=10⁵ 时必超时。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>第二步 — 关键洞察：</strong>归并排序合并两个<em>已排序</em>子数组时，若左边 a[i] &gt; 右边 a[j]，则左边 <strong>a[i] 及其后面所有元素</strong> 都 &gt; a[j]（因为左边已排序）→ 一次贡献 <code>mid-i+1</code> 个逆序对！</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>第三步 — 具体演示：</strong>合并 <code>[3,4]</code> 和 <code>[1,2]</code>。i=0指向3，j=0指向1：3&gt;1→贡献 <code>2-0+1=<strong>2</strong></code> 对[(3,1)(4,1)]。j++指向2：3&gt;2→再贡献 <strong>2</strong> 对。总共 <strong>4</strong> 对。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>一句精髓：</strong><code style="background:#fef0e5;padding:2px 6px;border-radius:4px;">if (a[i] &gt; a[j]) inv += (mid - i + 1);</code></p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：每次选第一个元素做 pivot</strong> → 已排序数组退化为 O(n²)<br>→ ✅ 随机选 pivot 或取中间。直接用 <code>std::sort()</code> 最安全（Introsort 保证 O(n log n)）。</p>
+              <p>❌ <strong>错误2：逆序对用 int 存储</strong> → n=10⁵ 时最多 ~5×10⁹ 对，int 溢出！<br>→ ✅ 必须使用 <code>long long</code>。</p>
+              <p>❌ <strong>错误3：归并后忘记写回原数组</strong> → 合并完必须 <code>a[l+i]=tmp[i]</code> 写回。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P1177" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -865,7 +928,73 @@ while(l<r){
         </div>
       </div>
       <div class="tip-box"><strong>⚠️ 死循环口诀：</strong> r=mid → 下取整 (l+r)/2；l=mid → 上取整 (l+r+1)/2。不放心就用 ans 变量记录可行解，百分百不出错。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：二分查找 & 二分答案 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：二分查找 & 二分答案</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：猜数字游戏</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">A 心里想一个 1~100 的数，B 来猜。B 每次猜中间数（50），A 说"大了"或"小了"。B 根据反馈<strong>每次砍掉一半</strong>范围——7 次以内必猜中。这就是<strong>二分查找</strong>：在<strong>有序</strong>序列中每次排除一半。<br><br><strong>二分答案</strong>是更高级的用法：当问题的"答案"满足<strong>单调性</strong>（答案越大越容易/越难满足条件），就对答案值域二分，把"求最优解"变成"判断可行性"。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 180" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <defs><marker id="aS2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0392b"/></marker></defs>
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">在有序数组 [1, 3, 5, 7, 9, 11, 13, 15] 中查找 7</text>
+              <!-- Round 1 -->
+              <text x="8" y="48" fill="#8b5e3c" font-size="10">第1轮:</text>
+              <rect x="60" y="32" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="75" y="47" text-anchor="middle" fill="#3d2020" font-size="11">1</text>
+              <rect x="92" y="32" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="107" y="47" text-anchor="middle" fill="#3d2020" font-size="11">3</text>
+              <rect x="124" y="32" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="139" y="47" text-anchor="middle" fill="#3d2020" font-size="11">5</text>
+              <rect x="156" y="32" width="30" height="22" rx="4" fill="#c0392b" stroke="#c0392b" stroke-width="2"/><text x="171" y="47" text-anchor="middle" fill="#fff" font-size="11">7</text>
+              <rect x="188" y="32" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="203" y="47" text-anchor="middle" fill="#3d2020" font-size="11">9</text>
+              <rect x="220" y="32" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="235" y="47" text-anchor="middle" fill="#3d2020" font-size="11">11</text>
+              <rect x="252" y="32" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="267" y="47" text-anchor="middle" fill="#3d2020" font-size="11">13</text>
+              <rect x="284" y="32" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="299" y="47" text-anchor="middle" fill="#3d2020" font-size="11">15</text>
+              <text x="330" y="47" fill="#8b5e3c" font-size="10">mid=(0+7)/2=3→arr[3]=7→找到!</text>
+              <!-- Round 2: what if looking for 3 -->
+              <text x="8" y="80" fill="#8b5e3c" font-size="10">找3:</text>
+              <rect x="60" y="64" width="30" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1"/><text x="75" y="79" text-anchor="middle" fill="#e74c3c" font-size="11">1</text>
+              <rect x="92" y="64" width="30" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1"/><text x="107" y="79" text-anchor="middle" fill="#e74c3c" font-size="11">3</text>
+              <rect x="124" y="64" width="30" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1"/><text x="139" y="79" text-anchor="middle" fill="#e74c3c" font-size="11">5</text>
+              <rect x="156" y="64" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1" opacity="0.3"/><text x="171" y="79" text-anchor="middle" fill="#e8d5c8" font-size="11">7</text>
+              <rect x="188" y="64" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1" opacity="0.3"/><text x="203" y="79" text-anchor="middle" fill="#e8d5c8" font-size="11">9</text>
+              <rect x="220" y="64" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1" opacity="0.3"/><text x="235" y="79" text-anchor="middle" fill="#e8d5c8" font-size="11">11</text>
+              <rect x="252" y="64" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1" opacity="0.3"/><text x="267" y="79" text-anchor="middle" fill="#e8d5c8" font-size="11">13</text>
+              <rect x="284" y="64" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1" opacity="0.3"/><text x="299" y="79" text-anchor="middle" fill="#e8d5c8" font-size="11">15</text>
+              <text x="330" y="79" fill="#8b5e3c" font-size="10">mid=3→arr[3]=7&gt;3→r=mid-1=2</text>
+              <!-- Round 3 -->
+              <text x="8" y="112" fill="#8b5e3c" font-size="10">第2轮:</text>
+              <rect x="60" y="96" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="75" y="111" text-anchor="middle" fill="#3d2020" font-size="11">1</text>
+              <rect x="92" y="96" width="30" height="22" rx="4" fill="#27ae60" stroke="#27ae60" stroke-width="2"/><text x="107" y="111" text-anchor="middle" fill="#27ae60" font-size="11">3</text>
+              <rect x="124" y="96" width="30" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="139" y="111" text-anchor="middle" fill="#3d2020" font-size="11">5</text>
+              <text x="180" y="111" fill="#8b5e3c" font-size="10">mid=(0+2)/2=1→arr[1]=3→找到!</text>
+              <!-- Key insight -->
+              <text x="310" y="140" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">每次砍掉一半！</text>
+              <text x="310" y="162" text-anchor="middle" fill="#8b5e3c" font-size="11">n=10⁹ 时只需约 30 次比较 → O(log n)</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>题目（洛谷 P1873）：</strong>有 N 棵树，第 i 棵高 H[i]。设置锯子高度 h，能获得 Σ max(0, H[i]-h) 的木材。问至少获得 M 米木材时，h 最大是多少？</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>关键观察 — 单调性：</strong>h 越小 → 获得的木材越多。h 越大 → 木材越少。即 <strong>check(h) = "能否获得 ≥M 米木材" 对 h 满足单调性</strong>（h 越小越容易满足）。因此可以对 h 做二分！</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>二分答案步骤：</strong>① 确定答案范围 [0, max(H)]；② while(l&lt;r){ mid=(l+r+1)/2; if(check(mid)) l=mid; else r=mid-1; }；③ 答案=l。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>⚠️ 为什么要上取整？</strong>当 check(mid)=true 时 l=mid，若 mid=(l+r)/2 下取整，当 l+1=r 时 mid=l，l=mid 不变 → <strong>死循环</strong>！所以必须 mid=(l+r+1)/2 上取整。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>口诀：</strong>r=mid→下取整；l=mid→上取整。不放心就用 ans 变量单独记录。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：死循环</strong> → l=mid 时用了下取整，导致区间不再缩小<br>→ ✅ r=mid 用 (l+r)/2；l=mid 用 (l+r+1)/2。</p>
+              <p>❌ <strong>错误2：循环条件写成 l&lt;=r</strong> → 当 l=r 时 mid=l=r，若 check=true 则 l=mid 不变，无限循环。<br>→ ✅ 整数二分用 while(l&lt;r)，退出时 l=r 即答案。</p>
+              <p>❌ <strong>错误3：check 函数写错单调方向</strong> → 二分答案要求单调性，确保"答案增大→check从true变false"（或反之）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P2249" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -951,7 +1080,66 @@ for(int i=1;i<n;i++)diff[i]+=diff[i-1]; // 前缀和还原</pre>
         </div>
       </div>
       <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 差分数组多开一位 <code>n+2</code> 防止 r+1 越界。前缀和配合哈希表可以解决<strong>子数组和为 K</strong> 的经典问题。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：前缀和 & 差分 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：前缀和 & 差分</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：记账本</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">你每天都有消费记录。月底想看第 5 天到第 15 天总共花了多少钱——每次都翻账本加一遍？太慢了。<strong>前缀和</strong>就是<strong>累计余额</strong>：pref[i] = 前 i 天的总和。查询任意区间和 = pref[r+1] - pref[l]，O(1) 搞定！<br><br><strong>差分</strong>是前缀和的逆运算：老板说"第5到第15天每天加工资100块"——不用每天改，只需在 diff[5]+=100, diff[16]-=100，最后统一还原。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 200" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">前缀和：sum[l..r] = pref[r+1] - pref[l]</text>
+              <!-- Original array -->
+              <text x="8" y="42" fill="#8b5e3c" font-size="11">a[]:</text>
+              <rect x="35" y="28" width="46" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="58" y="43" text-anchor="middle" fill="#3d2020" font-size="11">a[0]=3</text>
+              <rect x="83" y="28" width="46" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="106" y="43" text-anchor="middle" fill="#3d2020" font-size="11">a[1]=1</text>
+              <rect x="131" y="28" width="46" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="154" y="43" text-anchor="middle" fill="#3d2020" font-size="11">a[2]=4</text>
+              <rect x="179" y="28" width="46" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="202" y="43" text-anchor="middle" fill="#3d2020" font-size="11">a[3]=2</text>
+              <rect x="227" y="28" width="46" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="250" y="43" text-anchor="middle" fill="#3d2020" font-size="11">a[4]=5</text>
+              <!-- pref array -->
+              <text x="8" y="80" fill="#8b5e3c" font-size="11">pref[]:</text>
+              <rect x="35" y="66" width="46" height="22" rx="4" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="58" y="81" text-anchor="middle" fill="#27ae60" font-size="10">pref[0]=0</text>
+              <rect x="83" y="66" width="46" height="22" rx="4" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="106" y="81" text-anchor="middle" fill="#27ae60" font-size="10">pref[1]=3</text>
+              <rect x="131" y="66" width="46" height="22" rx="4" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="154" y="81" text-anchor="middle" fill="#27ae60" font-size="10">pref[2]=4</text>
+              <rect x="179" y="66" width="46" height="22" rx="4" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="202" y="81" text-anchor="middle" fill="#27ae60" font-size="10">pref[3]=8</text>
+              <rect x="227" y="66" width="46" height="22" rx="4" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="250" y="81" text-anchor="middle" fill="#27ae60" font-size="10">pref[4]=10</text>
+              <rect x="275" y="66" width="46" height="22" rx="4" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="298" y="81" text-anchor="middle" fill="#27ae60" font-size="10">pref[5]=15</text>
+              <!-- Query illustration -->
+              <text x="8" y="116" fill="#8b5e3c" font-size="11">查询:</text>
+              <text x="60" y="116" fill="#c0392b" font-size="11">sum[1..3] = a[1]+a[2]+a[3] = 1+4+2 = 7</text>
+              <text x="330" y="116" fill="#8b5e3c" font-size="11">= pref[4] - pref[1] = 10 - 3 = 7 ✓</text>
+              <rect x="83" y="128" width="46" height="18" rx="3" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="3"/><text x="106" y="141" text-anchor="middle" fill="#e74c3c" font-size="9">a[1]</text>
+              <rect x="131" y="128" width="46" height="18" rx="3" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="3"/><text x="154" y="141" text-anchor="middle" fill="#e74c3c" font-size="9">a[2]</text>
+              <rect x="179" y="128" width="46" height="18" rx="3" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5" stroke-dasharray="3"/><text x="202" y="141" text-anchor="middle" fill="#e74c3c" font-size="9">a[3]</text>
+              <!-- Diff -->
+              <text x="8" y="170" fill="#8b5e3c" font-size="11">差分:</text>
+              <text x="60" y="170" fill="#c0392b" font-size="11">区间 [1,3] 全部 +2：diff[1]+=2, diff[4]-=2</text>
+              <text x="310" y="192" text-anchor="middle" fill="#8b5e3c" font-size="11">💡 前缀和与差分互为逆运算！</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>场景：</strong>给你长度为 n 的数组，q 次查询，每次问区间 [l, r] 的和。n, q ≤ 10⁵。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>暴力法：</strong>每次查询遍历 [l, r] 求和 → O(nq)，最坏 10¹⁰ 次操作，必超时。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>前缀和解法：</strong>① 预处理 pre[i] = pre[i-1] + a[i]（O(n)）；② 查询 sum[l..r] = pre[r] - pre[l-1]（O(1)）。总复杂度 O(n+q)。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>二维前缀和（子矩阵和）：</strong>pre[i][j] = pre[i-1][j] + pre[i][j-1] - pre[i-1][j-1] + a[i][j]。查询 (x1,y1) 到 (x2,y2) 的和 = pre[x2][y2] - pre[x1-1][y2] - pre[x2][y1-1] + pre[x1-1][y1-1]。<strong>容斥原理</strong>：大矩形 - 上 - 左 + 左上。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：下标搞混</strong> → 前缀和数组通常开 n+1 大小，pref[0]=0，查询 sum[l..r]=pref[r+1]-pref[l]。<br>→ ✅ 统一用 0-indexed 或统一用 1-indexed，千万别混用。</p>
+              <p>❌ <strong>错误2：差分还原时忘记累加</strong> → diff[i] 存的是差值，还原时 a[i] = a[i-1] + diff[i]（不是直接用 diff）。</p>
+              <p>❌ <strong>错误3：二维容斥符号搞反</strong> → 记住公式：S = 大 - 上 - 左 + 左上（左上被减了两次，要加回来）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P8218" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1042,7 +1230,65 @@ while(l<r){
         </div>
       </div>
       <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 滑动窗口的精髓：右指针负责扩张，左指针负责收缩。每个元素最多被加入一次、删除一次 = O(n)。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：双指针 & 滑动窗口 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：双指针 & 滑动窗口</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：伸缩的窗户</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">想象一个可以<strong>伸缩的窗户</strong>在数组上滑动。窗口右端向右扩张（加元素），窗口左端向右收缩（减元素）。维护窗口内的某些<strong>统计信息</strong>（如和、最大值、元素种类数），在窗口滑动过程中找到满足条件的最优解。<br><br><strong>双指针</strong>更广义：两个指针 i 和 j，通常 i 向右移时 j 也"单调"地向某个方向移动——利用这种<strong>单调性</strong>将 O(n²) 降到 O(n)。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 170" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">滑动窗口：找长度为 k 的子数组最大和（k=3）</text>
+              <!-- Window position 1 -->
+              <text x="8" y="44" fill="#8b5e3c" font-size="10">窗口1:</text>
+              <rect x="55" y="30" width="44" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="77" y="45" text-anchor="middle" fill="#e74c3c" font-size="11" font-weight="bold">2</text>
+              <rect x="101" y="30" width="44" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="123" y="45" text-anchor="middle" fill="#e74c3c" font-size="11" font-weight="bold">1</text>
+              <rect x="147" y="30" width="44" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="169" y="45" text-anchor="middle" fill="#e74c3c" font-size="11" font-weight="bold">5</text>
+              <rect x="193" y="30" width="44" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="215" y="45" text-anchor="middle" fill="#3d2020" font-size="11">3</text>
+              <rect x="239" y="30" width="44" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="261" y="45" text-anchor="middle" fill="#3d2020" font-size="11">4</text>
+              <text x="295" y="45" fill="#c0392b" font-size="10">sum=8</text>
+              <!-- Window position 2 -->
+              <text x="8" y="76" fill="#8b5e3c" font-size="10">窗口2:</text>
+              <rect x="55" y="62" width="44" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1" opacity="0.4"/><text x="77" y="77" text-anchor="middle" fill="#e8d5c8" font-size="11">2</text>
+              <rect x="101" y="62" width="44" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="123" y="77" text-anchor="middle" fill="#e74c3c" font-size="11" font-weight="bold">1</text>
+              <rect x="147" y="62" width="44" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="169" y="77" text-anchor="middle" fill="#e74c3c" font-size="11" font-weight="bold">5</text>
+              <rect x="193" y="62" width="44" height="22" rx="4" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/><text x="215" y="77" text-anchor="middle" fill="#e74c3c" font-size="11" font-weight="bold">3</text>
+              <rect x="239" y="62" width="44" height="22" rx="4" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="261" y="77" text-anchor="middle" fill="#3d2020" font-size="11">4</text>
+              <text x="295" y="77" fill="#c0392b" font-size="10">sum=9 ✅ 最大！</text>
+              <!-- O(1) trick -->
+              <text x="310" y="108" text-anchor="middle" fill="#8b5e3c" font-size="11">💡 O(1) 更新：新窗口和 = 旧窗口和 - 移除元素 + 新增元素</text>
+              <text x="310" y="130" text-anchor="middle" fill="#c0392b" font-size="11">sum_new = sum_old - a[left] + a[right]</text>
+              <!-- 2-pointers visualization -->
+              <text x="310" y="160" text-anchor="middle" fill="#8b5e3c" font-size="11">双指针：i→ 时 j 也单调移动，每个元素最多被访问 2 次 → O(n)</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>题目：</strong>给定字符串 s，找出<strong>不含重复字符</strong>的最长子串的长度。如 "abcabcbb" → 答案 3 ("abc")。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>滑动窗口思路：</strong></p>
+              <ol style="color:var(--text-secondary);padding-left:20px;line-height:2;">
+                <li>维护窗口 [l, r]，窗口内始终<strong>无重复字符</strong>。</li>
+                <li>r 不断右移，将 s[r] 加入窗口。如果 s[r] 已在窗口中 → <strong>l 右移</strong>直到窗口内不再有重复。</li>
+                <li>每步用 r-l+1 更新最大长度。</li>
+              </ol>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>演示：</strong>s = "abcabcbb"。l=0,r=0→"a"；r=1→"ab"；r=2→"abc"（长度3）。r=3时 s[3]='a' 已存在 → l 移到第一个 a 后面→窗口变"bca"（长度3）...</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>复杂度：</strong>l 和 r 各自最多移动 n 次 → O(n)。每步 O(1) 用哈希表判断重复。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：忘记移动左指针</strong> → 窗口只扩张不收缩，导致结果偏大。<br>→ ✅ 遇到冲突时必须移动 l 直到合法。</p>
+              <p>❌ <strong>错误2：双指针写成 O(n²)</strong> → 每次 r 右移时 l 又从头开始扫。<br>→ ✅ 关键：l 只向右移动，永不回退。每个元素最多被访问两次。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P1638" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1127,7 +1373,52 @@ for(int i=2;i<=n;i++){
         </div>
       </div>
       <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 欧拉筛中 <code>if(i%p==0)break</code> 是关键——保证每个合数只被筛一次。C++17 起可以直接用 <code>std::gcd()</code> 和 <code>std::lcm()</code>。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：基础数论 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：基础数论</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：切蛋糕与公约数</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">两个人分蛋糕，要切成大小相同的块，每块尽可能大——这就是<strong>最大公约数 (GCD)</strong>。切成整数块的最小总块数——这涉及<strong>最小公倍数 (LCM)</strong>。<br><br>而<strong>素数筛</strong>就像在名单上逐个划掉合数：2 是素数，划掉 4,6,8,...；3 是素数，划掉 6,9,12,...；剩下的就是素数。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 160" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">欧几里得算法：gcd(a, b) = gcd(b, a % b)</text>
+              <text x="310" y="42" text-anchor="middle" fill="#3d2020" font-size="13" font-weight="bold">gcd(48, 18) = ?</text>
+              <text x="100" y="72" text-anchor="middle" fill="#c0392b" font-size="12">48 ÷ 18 = 2 余 12</text>
+              <text x="310" y="72" text-anchor="middle" fill="#c0392b" font-size="12">18 ÷ 12 = 1 余 6</text>
+              <text x="520" y="72" text-anchor="middle" fill="#c0392b" font-size="12">12 ÷ 6 = 2 余 0</text>
+              <line x1="145" y1="80" x2="270" y2="80" stroke="#e8d5c8" stroke-width="1" marker-end="url(#aS1)"/>
+              <line x1="355" y1="80" x2="475" y2="80" stroke="#e8d5c8" stroke-width="1" marker-end="url(#aS1)"/>
+              <text x="100" y="100" text-anchor="middle" fill="#8b5e3c" font-size="10">gcd(48,18)=gcd(18,12)</text>
+              <text x="310" y="100" text-anchor="middle" fill="#8b5e3c" font-size="10">gcd(18,12)=gcd(12,6)</text>
+              <text x="520" y="100" text-anchor="middle" fill="#27ae60" font-size="10">余数为0→gcd=6!</text>
+              <text x="310" y="130" text-anchor="middle" fill="#8b5e3c" font-size="11">迭代版一行搞定：while(b) { a%=b; swap(a,b); } return a;</text>
+              <text x="310" y="155" text-anchor="middle" fill="#8b5e3c" font-size="11">O(log min(a,b)) — 非常快！</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);line-height:1.9;"><strong>GCD 模板（一行）：</strong><code>int gcd(int a,int b){return b?gcd(b,a%b):a;}</code></p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>LCM：</strong><code>lcm(a,b) = a / gcd(a,b) * b</code>（先除后乘防溢出）。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>快速幂：</strong>求 a^b mod m。核心：b 的二进制拆分。a^13 = a^(1101₂) = a^8 · a^4 · a^1。每次 a=a*a%m（翻倍），b&gt;&gt;=1（右移），b&1 时 ans=ans*a%m。O(log b)。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>埃氏筛（Eratosthenes）：</strong>求 [1..n] 所有素数。从 2 开始，每找到一个素数 p，就把 p 的所有倍数标记为合数。O(n log log n)。优化：从 p² 开始标记（更小的倍数已被筛过）。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>应用场景：</strong>模运算求逆元、分数约分、组合数取模、区间素数判定。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：LCM 写成 a*b/gcd(a,b)</strong> → a*b 可能溢出！<br>→ ✅ 先除后乘：a/gcd(a,b)*b。</p>
+              <p>❌ <strong>错误2：快速幂忘记取模</strong> → a 和 ans 每次乘法后都要取模，否则中途溢出。<br>→ ✅ <code>a = 1LL * a * a % mod;</code></p>
+              <p>❌ <strong>错误3：筛法数组开太小或忘记初始化</strong> → isPrime[0]=isPrime[1]=false。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P1029" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1208,7 +1499,54 @@ while(pq.size()>1){
         </div>
       </div>
       <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 贪心最难的是<strong>证明正确性</strong>。区间调度按结束时间排序是因为越早结束留给后面的时间越多。"选最早开始"或"选最短"都是错的。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：贪心算法 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：贪心算法</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：找零钱</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">假设你有 1 元、5 元、10 元硬币，要找零 18 元。你会怎么做？先拿最大的 10 元（剩 8），再拿 5 元（剩 3），再拿 3 个 1 元——总共 5 个硬币。这就是<strong>贪心</strong>：每一步都做<strong>当前看起来最优</strong>的选择，不回溯。<br><br>⚠️ 注意：贪心只在问题满足<strong>贪心选择性质</strong>时正确（局部最优→全局最优）。不是所有问题都能贪心！</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 170" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">活动选择问题：在时间线上选最多不重叠的活动</text>
+              <!-- Timeline -->
+              <line x1="40" y1="50" x2="580" y2="50" stroke="#e8d5c8" stroke-width="2"/>
+              <text x="40" y="68" fill="#8b5e3c" font-size="9">0</text><text x="580" y="68" fill="#8b5e3c" font-size="9">16</text>
+              <!-- Activities -->
+              <rect x="60" y="32" width="80" height="14" rx="3" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="100" y="43" text-anchor="middle" fill="#27ae60" font-size="9">A: [1,5]</text>
+              <rect x="140" y="52" width="60" height="14" rx="3" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="170" y="63" text-anchor="middle" fill="#8b5e3c" font-size="9">B:[2,5]</text>
+              <rect x="140" y="70" width="100" height="14" rx="3" fill="#fadbd8" stroke="#e74c3c" stroke-width="1"/><text x="190" y="81" text-anchor="middle" fill="#e74c3c" font-size="9">D: [4,9]</text>
+              <rect x="260" y="32" width="120" height="14" rx="3" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="320" y="43" text-anchor="middle" fill="#27ae60" font-size="9">C: [6,12] ✅</text>
+              <rect x="380" y="52" width="100" height="14" rx="3" fill="none" stroke="#e8d5c8" stroke-width="1"/><text x="430" y="63" text-anchor="middle" fill="#8b5e3c" font-size="9">E:[8,12]</text>
+              <rect x="420" y="70" width="80" height="14" rx="3" fill="#d4efdf" stroke="#27ae60" stroke-width="1"/><text x="460" y="81" text-anchor="middle" fill="#27ae60" font-size="9">F: [13,15] ✅</text>
+              <!-- Arrow showing greedy choice -->
+              <text x="310" y="108" text-anchor="middle" fill="#c0392b" font-size="11">贪心策略：按结束时间排序，每次选最早结束且不与已选冲突的活动</text>
+              <text x="310" y="130" text-anchor="middle" fill="#8b5e3c" font-size="11">选 A(1-5)→跳过 B,D→选 C(6-12)→跳过 E→选 F(13-15) → 共 3 个活动，最优！</text>
+              <text x="310" y="155" text-anchor="middle" fill="#c0392b" font-size="10">💡 贪心正确性证明：最早结束的活动留给后面最多时间</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>题目：</strong>给 n 个区间 [lᵢ, rᵢ]，选最少的点使得每个区间至少包含一个点。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>贪心策略：</strong>① 按<strong>右端点 rᵢ 从小到大</strong>排序；② 从前往后扫描，若当前区间未被覆盖 → 在<strong>它的右端点</strong>放一个点（这是能覆盖当前区间的最靠右位置，最可能也覆盖后续区间）。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>为什么正确？</strong>右端点最小的区间必须被覆盖，而把点放在它的右端点是最"慷慨"的选择——给后面的区间留下最大的覆盖机会。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>步骤：</strong>sort(按 r) → last = -INF → for each [l,r]: if l &gt; last: ans++, last = r。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>贪心通用思路：</strong>排序→按序处理→维护当前状态→判断是否选当前元素。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：不证明就贪心</strong> → 不是所有问题都能贪心！如果贪心策略不对，样例都过不了。<br>→ ✅ 先想反例：是否存在"当前最优选择"导致全局变差的情况？</p>
+              <p>❌ <strong>错误2：排序关键字选错</strong> → 活动选择按"开始时间"排序是错的！<br>→ ✅ 正确是按"结束时间"排序。排序前先想清楚为什么这样排。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P1090" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1297,7 +1635,73 @@ while(!q.empty()){
         </div>
       </div>
       <div class="tip-box"><strong>⚠️ 回溯关键：</strong> 一定要<strong>恢复现场</strong>！选了就要撤销。DFS 递归太深会爆栈（>10⁵层），大图用迭代栈或改用 BFS。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：DFS & BFS — 搜索 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：DFS & BFS — 搜索</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：探索迷宫</p>
+          <p style="color:var(--text-secondary);line-height:1.8;"><strong>DFS（深度优先）</strong>像一个人走迷宫：一条路走到黑，碰壁了再退回来换一条路。用<strong>递归/栈</strong>实现。<br><strong>BFS（广度优先）</strong>像水波扩散：从起点一层一层往外走，同时探索所有相邻位置。用<strong>队列</strong>实现，保证第一次到达某个位置时就是最短路径。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 200" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">DFS vs BFS（从节点 1 出发遍历树）</text>
+              <text x="160" y="36" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">DFS: 1→2→4→5→3→6</text>
+              <text x="470" y="36" text-anchor="middle" fill="#27ae60" font-size="12" font-weight="bold">BFS: 1→2→3→4→5→6</text>
+              <!-- DFS tree -->
+              <circle cx="160" cy="60" r="14" fill="#c0392b"/><text x="160" y="64" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+              <line x1="148" y1="70" x2="110" y2="90" stroke="#c0392b" stroke-width="1.5"/>
+              <line x1="172" y1="70" x2="210" y2="90" stroke="#c0392b" stroke-width="1.5"/>
+              <circle cx="100" cy="100" r="12" fill="#e8a090"/><text x="100" y="104" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">2</text>
+              <circle cx="220" cy="100" r="12" fill="#e8a090"/><text x="220" y="104" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">3</text>
+              <line x1="90" y1="108" x2="70" y2="128" stroke="#c0392b" stroke-width="1"/>
+              <line x1="110" y1="108" x2="130" y2="128" stroke="#c0392b" stroke-width="1"/>
+              <circle cx="65" cy="138" r="10" fill="#f5c6c0"/><text x="65" y="142" text-anchor="middle" fill="#fff" font-size="9">4</text>
+              <circle cx="135" cy="138" r="10" fill="#f5c6c0"/><text x="135" y="142" text-anchor="middle" fill="#fff" font-size="9">5</text>
+              <line x1="210" y1="108" x2="250" y2="128" stroke="#c0392b" stroke-width="1"/>
+              <circle cx="250" cy="138" r="10" fill="#f5c6c0"/><text x="250" y="142" text-anchor="middle" fill="#fff" font-size="9">6</text>
+              <!-- BFS levels -->
+              <circle cx="470" cy="60" r="14" fill="#27ae60"/><text x="470" y="64" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+              <circle cx="430" cy="95" r="12" fill="#82e0aa"/><text x="430" y="99" text-anchor="middle" fill="#fff" font-size="10">2</text>
+              <circle cx="510" cy="95" r="12" fill="#82e0aa"/><text x="510" y="99" text-anchor="middle" fill="#fff" font-size="10">3</text>
+              <circle cx="415" cy="130" r="10" fill="#a9dfbf"/><text x="415" y="134" text-anchor="middle" fill="#fff" font-size="9">4</text>
+              <circle cx="455" cy="130" r="10" fill="#a9dfbf"/><text x="455" y="134" text-anchor="middle" fill="#fff" font-size="9">5</text>
+              <circle cx="505" cy="130" r="10" fill="#a9dfbf"/><text x="505" y="134" text-anchor="middle" fill="#fff" font-size="9">6</text>
+              <line x1="462" y1="72" x2="438" y2="86" stroke="#27ae60" stroke-width="1"/>
+              <line x1="478" y1="72" x2="502" y2="86" stroke="#27ae60" stroke-width="1"/>
+              <line x1="430" y1="105" x2="420" y2="120" stroke="#27ae60" stroke-width="0.8"/>
+              <line x1="435" y1="105" x2="450" y2="120" stroke="#27ae60" stroke-width="0.8"/>
+              <line x1="510" y1="105" x2="505" y2="120" stroke="#27ae60" stroke-width="0.8"/>
+              <text x="160" y="170" text-anchor="middle" fill="#8b5e3c" font-size="10">深度优先：用栈（递归），一条路走到底</text>
+              <text x="470" y="170" text-anchor="middle" fill="#8b5e3c" font-size="10">广度优先：用队列，一层一层走，天然最短路</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>题目：</strong>给定 n，输出 1~n 的所有排列（全排列）。如 n=3 → 123, 132, 213, 231, 312, 321。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>DFS 回溯思路：</strong></p>
+              <ol style="color:var(--text-secondary);padding-left:20px;line-height:2;">
+                <li><strong>状态表示：</strong>path[i] = 第 i 个位置选了什么数；used[x] = 数 x 是否已用过。</li>
+                <li><strong>dfs(depth)：</strong>已选 depth 个数。若 depth==n → 输出 path，返回。</li>
+                <li>否则枚举 1~n 中未使用的数 x：path[depth]=x, used[x]=true, dfs(depth+1), <strong>used[x]=false（回溯！）</strong></li>
+              </ol>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>BFS 求迷宫最短路：</strong>从起点入队→每次取队首→四个方向探索→未访问过的合法位置入队并标记距离。第一次到达终点时的距离就是<strong>最短距离</strong>。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>DFS vs BFS：</strong>DFS 找所有解（回溯）；BFS 找最短路径（无权图最短路）。DFS 用递归（简洁），BFS 用队列。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：DFS 忘记回溯恢复状态</strong> → used[x]=true 后必须 used[x]=false 恢复，否则后续分支看不到 x。<br>→ ✅ 递归调用后<strong>对称地恢复现场</strong>。</p>
+              <p>❌ <strong>错误2：BFS 忘记标记访问</strong> → 同一位置多次入队导致 MLE/TLE。<br>→ ✅ 入队时立刻标记 visited，不要在出队时才标记。</p>
+              <p>❌ <strong>错误3：DFS 递归太深爆栈</strong> → 递归深度 &gt;10⁶ 可能栈溢出。<br>→ ✅ 预估深度或用迭代栈。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P1706" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1384,7 +1788,63 @@ for(int i=1;i<=n;i++)for(int j=1;j<=m;j++)
         </div>
       </div>
       <div class="tip-box"><strong>🏆 入门建议：</strong> DP 没有捷径，从最简单的"最大子段和""爬楼梯"开始，慢慢感受"状态"和"转移"的含义。核心是<strong>想清楚 dp[i] 到底表示什么</strong>。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：动态规划 (DP) ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：动态规划 (DP)</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：爬楼梯</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">你站在第 0 级台阶。每次可以走 1 或 2 级。走到第 n 级有几种走法？<br><br>如果走到第 3 级：可以从第 1 级走 2 步上来，或从第 2 级走 1 步上来 → f(3)=f(2)+f(1)。<br>这个<strong>递推关系</strong>就是 DP 的核心：<strong>大问题拆成小问题，小问题结果被重复利用</strong>。关键要素：<strong>状态定义 + 状态转移方程 + 边界条件</strong>。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 180" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">DP = 状态定义 + 转移方程 + 边界</text>
+              <!-- Staircase -->
+              <rect x="20" y="60" width="80" height="12" rx="2" fill="#e8d5c8"/><text x="60" y="70" text-anchor="middle" fill="#3d2020" font-size="9">f(1) = 1 种</text>
+              <rect x="20" y="90" width="80" height="12" rx="2" fill="#e8d5c8"/><text x="60" y="100" text-anchor="middle" fill="#3d2020" font-size="9">f(2) = 2 种</text>
+              <rect x="20" y="120" width="80" height="12" rx="2" fill="#e8d5c8"/><text x="60" y="130" text-anchor="middle" fill="#3d2020" font-size="9">f(3) = 3 种</text>
+              <rect x="20" y="150" width="80" height="12" rx="2" fill="#e8d5c8"/><text x="60" y="160" text-anchor="middle" fill="#3d2020" font-size="9">f(4) = 5 种</text>
+              <!-- Transition arrows -->
+              <line x1="100" y1="66" x2="170" y2="85" stroke="#c0392b" stroke-width="1" marker-end="url(#aS1)"/>
+              <line x1="100" y1="96" x2="170" y2="85" stroke="#c0392b" stroke-width="1"/>
+              <text x="135" y="80" fill="#c0392b" font-size="9">+1 步</text>
+              <text x="135" y="110" fill="#c0392b" font-size="9">+2 步</text>
+              <!-- f(3) derivation -->
+              <rect x="180" y="78" width="120" height="30" rx="6" fill="#fadbd8" stroke="#e74c3c" stroke-width="1.5"/>
+              <text x="240" y="97" text-anchor="middle" fill="#e74c3c" font-size="12" font-weight="bold">f(3)=f(2)+f(1)</text>
+              <!-- DP table -->
+              <text x="8" y="40" fill="#8b5e3c" font-size="11">Fibonacci DP:</text>
+              <rect x="340" y="55" width="50" height="30" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="365" y="75" text-anchor="middle" fill="#27ae60" font-size="10">f[0]=1</text>
+              <rect x="395" y="55" width="50" height="30" rx="5" fill="#d4efdf" stroke="#27ae60" stroke-width="1.5"/><text x="420" y="75" text-anchor="middle" fill="#27ae60" font-size="10">f[1]=1</text>
+              <rect x="450" y="55" width="50" height="30" rx="5" fill="#fff" stroke="#e8d5c8" stroke-width="1.5"/><text x="475" y="75" text-anchor="middle" fill="#3d2020" font-size="10">f[2]=2</text>
+              <rect x="505" y="55" width="50" height="30" rx="5" fill="#fff" stroke="#e8d5c8" stroke-width="1.5"/><text x="530" y="75" text-anchor="middle" fill="#3d2020" font-size="10">f[3]=3</text>
+              <rect x="560" y="55" width="50" height="30" rx="5" fill="#fff" stroke="#e8d5c8" stroke-width="1.5"/><text x="585" y="75" text-anchor="middle" fill="#3d2020" font-size="10">f[4]=5</text>
+              <text x="395" y="110" text-anchor="middle" fill="#8b5e3c" font-size="10">边界条件</text><text x="530" y="110" text-anchor="middle" fill="#8b5e3c" font-size="10">递推填充</text>
+              <text x="310" y="145" text-anchor="middle" fill="#c0392b" font-size="12" font-weight="bold">DP 三要素：① 状态定义  ② 转移方程  ③ 边界条件</text>
+              <text x="310" y="168" text-anchor="middle" fill="#8b5e3c" font-size="11">核心思想：避免重复计算，用空间换时间</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>题目：</strong>给定数组 a，求连续子数组的最大和。如 [-2, 1, -3, 4, -1, 2, 1, -5, 4] → 答案 6（子数组 [4, -1, 2, 1]）。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>DP 分析：</strong>① <strong>状态定义：</strong>dp[i] = 以 a[i] <strong>结尾</strong>的最大子数组和。② <strong>转移方程：</strong>dp[i] = max(dp[i-1] + a[i], a[i])（要么接在前面的子数组后面，要么另起炉灶）。③ <strong>边界：</strong>dp[0] = a[0]。④ <strong>答案：</strong>max(dp[0..n-1])。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>追踪演示：</strong>a=[-2,1,-3,4,-1,2,1]。dp[0]=-2；dp[1]=max(1, -2+1)=1；dp[2]=max(-3,1-3)=-2；dp[3]=max(4,-2+4)=4；dp[4]=max(-1,4-1)=3；dp[5]=max(2,3+2)=5；dp[6]=max(1,5+1)=<strong>6</strong>。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>空间优化：</strong>dp[i] 只依赖 dp[i-1]，可以用一个变量滚动更新，O(n) 时间 O(1) 空间。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：状态定义不清楚</strong> → DP 最关键的步骤！想清楚"dp[i] 代表什么"才能写出转移方程。<br>→ ✅ 通常定义为"以 i 结尾的...的最优值"或"前 i 个...的最优值"。</p>
+              <p>❌ <strong>错误2：忘记初始化边界</strong> → dp[0] 或 dp 初始值没设置正确，全盘皆错。<br>→ ✅ 先写边界，再写循环。</p>
+              <p>❌ <strong>错误3：遍历顺序错误</strong> → 有些 DP 需要按特定顺序填充（如区间 DP 按长度枚举）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P1115" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1476,7 +1936,52 @@ for(int i=0;i<n;i++){int k=cnt[i];
         </div>
       </div>
       <div class="tip-box"><strong>🏆 口诀：</strong> 01背包<strong>倒着走</strong>（j--），完全背包<strong>正着走</strong>（j++），多重背包<strong>二进制拆</strong>。想不明白就画二维表看状态来源。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：背包问题 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：背包问题</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：旅行打包</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">你有一个容量有限的背包（比如 10kg），有 n 件物品，每件有重量 w[i] 和价值 v[i]。你要选一些装进去，在不超过背包容量的前提下，让总价值最大。<br><br>这就是经典的<strong>0/1 背包</strong>：每件物品要么拿（1）要么不拿（0），不能拿半件。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 200" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">0/1 背包 DP 表：物品i × 容量j → 最大价值</text>
+              <text x="80" y="36" fill="#8b5e3c" font-size="10">物品: (w=2,v=3), (w=3,v=4), (w=4,v=5)</text>
+              <text x="410" y="36" fill="#8b5e3c" font-size="10">背包容量 C=8</text>
+              <!-- DP Table mini -->
+              <text x="10" y="58" fill="#8b5e3c" font-size="9">j=</text><text x="28" y="58" fill="#8b5e3c" font-size="9">0</text><text x="58" y="58" fill="#8b5e3c" font-size="9">1</text><text x="88" y="58" fill="#8b5e3c" font-size="9">2</text><text x="118" y="58" fill="#8b5e3c" font-size="9">3</text><text x="148" y="58" fill="#8b5e3c" font-size="9">4</text><text x="178" y="58" fill="#8b5e3c" font-size="9">5</text><text x="208" y="58" fill="#8b5e3c" font-size="9">6</text><text x="238" y="58" fill="#8b5e3c" font-size="9">7</text><text x="268" y="58" fill="#8b5e3c" font-size="9">8</text>
+              <rect x="0" y="62" width="300" height="24" rx="0" fill="#fce4dc"/><text x="35" y="79" text-anchor="middle" fill="#3d2020" font-size="9">i=0</text><text x="55" y="79" fill="#3d2020" font-size="9">0</text><text x="85" y="79" fill="#3d2020" font-size="9">0</text><text x="115" y="79" fill="#3d2020" font-size="9">0</text><text x="145" y="79" fill="#3d2020" font-size="9">0</text><text x="175" y="79" fill="#3d2020" font-size="9">0</text><text x="205" y="79" fill="#3d2020" font-size="9">0</text><text x="235" y="79" fill="#3d2020" font-size="9">0</text><text x="265" y="79" fill="#3d2020" font-size="9">0</text><text x="295" y="79" fill="#3d2020" font-size="9">0</text>
+              <rect x="0" y="86" width="300" height="24" rx="0" fill="#fff"/><text x="35" y="103" text-anchor="middle" fill="#3d2020" font-size="9">i=1</text><text x="55" y="103" fill="#3d2020" font-size="9">0</text><text x="85" y="103" fill="#3d2020" font-size="9">0</text><text x="115" y="103" fill="#c0392b" font-size="9">3</text><text x="145" y="103" fill="#c0392b" font-size="9">3</text><text x="175" y="103" fill="#c0392b" font-size="9">3</text><text x="205" y="103" fill="#c0392b" font-size="9">3</text><text x="235" y="103" fill="#c0392b" font-size="9">3</text><text x="265" y="103" fill="#c0392b" font-size="9">3</text><text x="295" y="103" fill="#c0392b" font-size="9">3</text>
+              <rect x="0" y="110" width="300" height="24" rx="0" fill="#fce4dc"/><text x="35" y="127" text-anchor="middle" fill="#3d2020" font-size="9">i=2</text><text x="55" y="127" fill="#3d2020" font-size="9">0</text><text x="85" y="127" fill="#3d2020" font-size="9">0</text><text x="115" y="127" fill="#3d2020" font-size="9">3</text><text x="145" y="127" fill="#c0392b" font-size="9">4</text><text x="175" y="127" fill="#c0392b" font-size="9">4</text><text x="205" y="127" fill="#c0392b" font-size="9">7</text><text x="235" y="127" fill="#c0392b" font-size="9">7</text><text x="265" y="127" fill="#c0392b" font-size="9">7</text><text x="295" y="127" fill="#c0392b" font-size="9">7</text>
+              <rect x="0" y="134" width="300" height="24" rx="0" fill="#fff"/><text x="35" y="151" text-anchor="middle" fill="#3d2020" font-size="9">i=3</text><text x="55" y="151" fill="#3d2020" font-size="9">0</text><text x="85" y="151" fill="#3d2020" font-size="9">0</text><text x="115" y="151" fill="#3d2020" font-size="9">3</text><text x="145" y="151" fill="#3d2020" font-size="9">4</text><text x="175" y="151" fill="#c0392b" font-size="9">5</text><text x="205" y="151" fill="#c0392b" font-size="9">7</text><text x="235" y="151" fill="#c0392b" font-size="9">8</text><text x="265" y="151" fill="#27ae60" font-size="9" font-weight="bold">9</text><text x="295" y="151" fill="#c0392b" font-size="9">9</text>
+              <text x="330" y="151" fill="#27ae60" font-size="11" font-weight="bold">← 答案：dp[3][8]=9</text>
+              <!-- Explanation -->
+              <text x="310" y="178" text-anchor="middle" fill="#8b5e3c" font-size="11">转移方程：dp[i][j] = max(dp[i-1][j], dp[i-1][j-w[i]] + v[i])</text>
+              <text x="310" y="195" text-anchor="middle" fill="#c0392b" font-size="11">不选第i件 ↑                    ↑ 选第i件（剩余容量j-w[i]）</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>问题：</strong>n 件物品，容量 C。第 i 件重量 w[i]，价值 v[i]。每件最多选一次，求最大价值。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>状态定义：</strong>dp[i][j] = 考虑前 i 件物品，容量为 j 时的最大价值。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>转移方程：</strong>对第 i 件物品，有两种选择：<strong>不选</strong>→dp[i-1][j]；<strong>选</strong>→dp[i-1][j-w[i]] + v[i]（前提 j≥w[i]）。取 max。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>一维优化（关键！）：</strong>dp[j] = max(dp[j], dp[j-w[i]]+v[i])。注意！j 必须<strong>从大到小</strong>遍历，否则一件物品可能被选多次（变成完全背包）。从小到大的遍历恰好是完全背包的写法。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>口诀：</strong>0/1 背包→j 从大到小；完全背包→j 从小到大。一维 dp 省空间，O(nC) 时间。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：一维优化时 j 从小到大循环</strong> → 导致每件物品被多次使用（变成完全背包）。<br>→ ✅ 0/1 背包必须 for(j=C; j>=w[i]; j--)。</p>
+              <p>❌ <strong>错误2：dp 数组初始化错误</strong> → "恰好装满"→dp[0]=0, 其余=-INF；"不超过容量"→全 0。<br>→ ✅ 根据问题要求选择初始化方式。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P1048" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1559,7 +2064,63 @@ for(int i=0;i<n;i++){int k=cnt[i];
         </div>
       </div>
       <div class="tip-box"><strong>🏆 竞赛技巧：</strong> 并查集是 Kruskal 最小生成树的基础。扩展域并查集（x 和 x+n 表示对立关系）可以解决"关押罪犯"等经典问题。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：并查集 (DSU) ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：并查集 (DSU)</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：家族树</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">一群人，每个人最初只认识自己。慢慢地，有人告诉你"A 和 B 是一家人"。你需要快速回答"X 和 Y 是不是一家人？"<br><br>并查集维护一种<strong>等价关系</strong>：① <strong>Find</strong>：找某人的"族长"（根节点）；② <strong>Union</strong>：把两个家族合并（一个族长认另一个为父）。带<strong>路径压缩</strong>和<strong>按秩合并</strong>优化后，操作几乎是 O(1)。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 180" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">并查集：Find(找根) + Union(合并)</text>
+              <!-- Initial -->
+              <text x="100" y="42" text-anchor="middle" fill="#8b5e3c" font-size="10">初始：各自独立</text>
+              <circle cx="60" cy="58" r="12" fill="#e8d5c8"/><text x="60" y="62" text-anchor="middle" fill="#3d2020" font-size="10">1</text>
+              <circle cx="100" cy="58" r="12" fill="#e8d5c8"/><text x="100" y="62" text-anchor="middle" fill="#3d2020" font-size="10">2</text>
+              <circle cx="140" cy="58" r="12" fill="#e8d5c8"/><text x="140" y="62" text-anchor="middle" fill="#3d2020" font-size="10">3</text>
+              <!-- After Union(1,2) -->
+              <text x="310" y="42" text-anchor="middle" fill="#8b5e3c" font-size="10">Union(1,2) 后：2 认 1 为父</text>
+              <circle cx="310" cy="58" r="14" fill="#c0392b"/><text x="310" y="62" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+              <line x1="316" y1="68" x2="355" y2="82" stroke="#c0392b" stroke-width="1.5"/>
+              <circle cx="365" cy="92" r="12" fill="#fadbd8"/><text x="365" y="96" text-anchor="middle" fill="#e74c3c" font-size="10">2</text>
+              <circle cx="420" cy="58" r="12" fill="#e8d5c8"/><text x="420" y="62" text-anchor="middle" fill="#3d2020" font-size="10">3</text>
+              <!-- After more unions -->
+              <text x="120" y="110" text-anchor="middle" fill="#8b5e3c" font-size="10">继续 Union(1,3), Union(2,4)...</text>
+              <circle cx="80" cy="130" r="16" fill="#c0392b"/><text x="80" y="135" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">1</text>
+              <line x1="72" y1="142" x2="40" y2="160" stroke="#c0392b" stroke-width="1"/><circle cx="40" cy="168" r="10" fill="#fadbd8"/><text x="40" y="172" text-anchor="middle" fill="#e74c3c" font-size="9">2</text>
+              <line x1="88" y1="142" x2="120" y2="160" stroke="#c0392b" stroke-width="1"/><circle cx="120" cy="168" r="10" fill="#fadbd8"/><text x="120" y="172" text-anchor="middle" fill="#e74c3c" font-size="9">3</text>
+              <line x1="72" y1="142" x2="70" y2="160" stroke="#c0392b" stroke-width="1"/><circle cx="75" cy="168" r="10" fill="#fadbd8"/><text x="75" y="172" text-anchor="middle" fill="#e74c3c" font-size="9">4</text>
+              <!-- Path compression -->
+              <text x="350" y="130" text-anchor="middle" fill="#8b5e3c" font-size="10">Find(4) 路径压缩后：</text>
+              <circle cx="380" cy="150" r="16" fill="#27ae60"/><text x="380" y="155" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">1</text>
+              <line x1="372" y1="158" x2="340" y2="172" stroke="#27ae60" stroke-width="1"/><circle cx="340" cy="178" r="8" fill="#d4efdf"/><text x="340" y="181" text-anchor="middle" fill="#27ae60" font-size="8">2</text>
+              <line x1="388" y1="158" x2="420" y2="172" stroke="#27ae60" stroke-width="1"/><circle cx="420" cy="178" r="8" fill="#d4efdf"/><text x="420" y="181" text-anchor="middle" fill="#27ae60" font-size="8">3</text>
+              <line x1="380" y1="166" x2="380" y2="172" stroke="#27ae60" stroke-width="1"/><circle cx="380" cy="178" r="8" fill="#d4efdf"/><text x="380" y="181" text-anchor="middle" fill="#27ae60" font-size="8">4</text>
+              <text x="500" y="165" fill="#27ae60" font-size="10">所有节点直连根！</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>题目：</strong>给一张图，每次加一条边 (u,v)，问当前有多少个连通块（或问 u,v 是否已连通）。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>DSU 解法：</strong>① 初始 n 个点各自独立，连通块数 = n。② 加边 (u,v)：若 find(u) ≠ find(v) → union(u,v)，连通块数 -1。③ 判断连通：find(u)==find(v)。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>核心操作：</strong><code>int find(int x){return fa[x]==x?x:fa[x]=find(fa[x]);}</code> — 这行包含了路径压缩，把 x 到根路径上所有节点直接连到根。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>应用场景：</strong>判断图连通性、Kruskal 最小生成树、朋友圈问题、动态连通性。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：find 不写路径压缩</strong> → 树可能退化成链，find O(n)。<br>→ ✅ <code>return fa[x]==x?x:fa[x]=find(fa[x]);</code></p>
+              <p>❌ <strong>错误2：Union 忘记先 find</strong> → 直接 fa[a]=b 可能把子树整个挂错位置。<br>→ ✅ int ra=find(a), rb=find(b); if(ra!=rb) fa[ra]=rb。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P3367" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1645,7 +2206,53 @@ for(int k=1;k<=n;k++)
         </div>
       </div>
       <div class="tip-box"><strong>⚠️ 注意：</strong> Dijkstra <strong>不能处理负权边</strong>！有负权考虑 SPFA（但最坏 O(VE) 可能被卡）。路网、时间等自然场景通常非负。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：最短路算法 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：最短路算法</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：导航地图</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">你打开地图导航从 A 到 B，地图告诉你最短路径。背后就是<strong>最短路算法</strong>。<br><br><strong>Dijkstra</strong>：边权非负时使用。像水波从起点扩散，每次选<strong>当前距离最小</strong>的节点确定它的最短距离（贪心），然后更新它的邻居。<strong>Floyd</strong>：求所有点对之间的最短路，三重循环，dp[k][i][j] 表示"只经过前 k 个点作为中转"时 i 到 j 的最短路。<strong>Bellman-Ford / SPFA</strong>：可处理负权边。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 200" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">Dijkstra：每次选距离最小且未确定的节点，更新它的邻居</text>
+              <!-- Graph -->
+              <circle cx="60" cy="100" r="16" fill="#c0392b"/><text x="60" y="105" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">S</text><text x="60" y="80" text-anchor="middle" fill="#c0392b" font-size="9">dist=0✓</text>
+              <circle cx="180" cy="60" r="14" fill="#fadbd8"/><text x="180" y="65" text-anchor="middle" fill="#e74c3c" font-size="10">A</text><text x="180" y="44" text-anchor="middle" fill="#e74c3c" font-size="9">dist=2</text>
+              <circle cx="300" cy="70" r="14" fill="#fadbd8"/><text x="300" y="75" text-anchor="middle" fill="#e74c3c" font-size="10">B</text><text x="300" y="54" text-anchor="middle" fill="#e74c3c" font-size="9">dist=5</text>
+              <circle cx="180" cy="140" r="14" fill="#d4efdf"/><text x="180" y="145" text-anchor="middle" fill="#27ae60" font-size="10">C</text><text x="180" y="162" text-anchor="middle" fill="#27ae60" font-size="9">dist=3</text>
+              <circle cx="380" cy="100" r="14" fill="none" stroke="#e8d5c8" stroke-width="1.5"/><text x="380" y="105" text-anchor="middle" fill="#8b5e3c" font-size="10">T</text><text x="380" y="80" text-anchor="middle" fill="#8b5e3c" font-size="9">dist=? </text>
+              <!-- Edges with weights -->
+              <line x1="74" y1="94" x2="168" y2="66" stroke="#e8d5c8" stroke-width="1.5"/><text x="120" y="74" fill="#8b5e3c" font-size="9">2</text>
+              <line x1="74" y1="106" x2="168" y2="136" stroke="#e8d5c8" stroke-width="1.5"/><text x="120" y="128" fill="#8b5e3c" font-size="9">3</text>
+              <line x1="192" y1="66" x2="288" y2="76" stroke="#e8d5c8" stroke-width="1.5"/><text x="240" y="65" fill="#8b5e3c" font-size="9">3</text>
+              <line x1="192" y1="136" x2="370" y2="106" stroke="#e8d5c8" stroke-width="1.5"/><text x="280" y="128" fill="#8b5e3c" font-size="9">4</text>
+              <line x1="310" y1="80" x2="368" y2="96" stroke="#e8d5c8" stroke-width="1.5"/><text x="340" y="82" fill="#8b5e3c" font-size="9">5</text>
+              <text x="310" y="185" text-anchor="middle" fill="#c0392b" font-size="11">步骤：确定S(0)→选A(2)更新B→选C(3)更新T→选B(5)→选T(7)完成</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>核心思想：</strong>将所有节点分为"已确定最短距离"和"未确定"两组。每次从未确定组中选<strong>dist 最小</strong>的节点 u 标记为已确定，然后用 u 的边去<strong>松弛</strong>它的邻居：if(dist[u]+w &lt; dist[v]) dist[v]=dist[u]+w。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>优先队列优化：</strong>用 priority_queue（小根堆）维护未确定的节点。每次取堆顶 O(log m)，每条边可能触发一次更新 O(log m)。总复杂度 O(m log m)。稠密图（m≈n²）用朴素 O(n²) 反而更快。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>Floyd-Warshall：</strong>求所有点对最短路。<code>for(k) for(i) for(j) dp[i][j]=min(dp[i][j], dp[i][k]+dp[k][j])</code>。O(n³)，n≤500 可用。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>算法选择：</strong>无负权 + 单源→Dijkstra；全源→Floyd(n≤500)；有负权→SPFA/Bellman-Ford。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：Dijkstra 用于负权图</strong> → 负权边下 Dijkstra 的贪心是错的！<br>→ ✅ 负权用 SPFA 或 Bellman-Ford。</p>
+              <p>❌ <strong>错误2：vis 标记位置错误</strong> → 在入队时标记 vis 会导致同一个节点被多次处理。<br>→ ✅ 在<strong>出队</strong>时检查 vis，若已确定则跳过。</p>
+              <p>❌ <strong>错误3：INF 设太小</strong> → 两条 INF 边相加溢出变负数。<br>→ ✅ INF 设为 0x3f3f3f3f（约 1e9，两倍不溢出）或 1e18。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P3371" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
@@ -1737,7 +2344,66 @@ vector<int>kmp(string&s,string&p){
         </div>
       </div>
       <div class="tip-box"><strong>🏆 学习建议：</strong> 先学字符串哈希（简单实用），再挑战 KMP。KMP 的 next 数组理解需要多看几遍——核心是"利用已知匹配信息，不回溯主串"。</div>
-      <h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
+      
+      <!-- ===== 深入讲解：字符串算法 ===== -->
+      <div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:var(--radius);padding:24px 28px;margin:20px 0;">
+        <h3 style="font-size:1.2rem;color:var(--text-heading);margin-bottom:16px;">🔬 从零开始理解：字符串算法</h3>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:6px;">🎯 生活类比：找规律</p>
+          <p style="color:var(--text-secondary);line-height:1.8;">在长文本中查找一个模式串（如 Ctrl+F 搜索）——这就是<strong>字符串匹配</strong>。<br><br><strong>KMP 算法</strong>的核心是<strong>next 数组</strong>（也叫 failure function）：记录模式串每个位置的最长<strong>相等前后缀</strong>长度。当匹配失败时，利用已知信息跳过不可能匹配的位置，而不是暴力地每次只移一位。</p>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">📐 图解原理</p>
+          <svg viewBox="0 0 620 185" width="100%" style="max-width:620px;display:block;margin:0 auto;">
+              <text x="310" y="16" text-anchor="middle" fill="#8b5e3c" font-size="11">KMP 匹配：利用 next 数组跳过不可能匹配的位置</text>
+              <text x="310" y="36" text-anchor="middle" fill="#8b5e3c" font-size="10">模式串 P = "ABABC"，文本 T = "ABABABC..."</text>
+              <!-- Alignment 1 -->
+              <text x="8" y="58" fill="#8b5e3c" font-size="9">匹配:</text>
+              <rect x="48" y="48" width="28" height="18" rx="3" fill="#27ae60"/><text x="62" y="60" text-anchor="middle" fill="#fff" font-size="9">A</text>
+              <rect x="78" y="48" width="28" height="18" rx="3" fill="#27ae60"/><text x="92" y="60" text-anchor="middle" fill="#fff" font-size="9">B</text>
+              <rect x="108" y="48" width="28" height="18" rx="3" fill="#27ae60"/><text x="122" y="60" text-anchor="middle" fill="#fff" font-size="9">A</text>
+              <rect x="138" y="48" width="28" height="18" rx="3" fill="#27ae60"/><text x="152" y="60" text-anchor="middle" fill="#fff" font-size="9">B</text>
+              <rect x="168" y="48" width="28" height="18" rx="3" fill="#e74c3c"/><text x="182" y="60" text-anchor="middle" fill="#fff" font-size="9">A</text>
+              <rect x="198" y="48" width="28" height="18" rx="3" fill="#e8d5c8"/><text x="212" y="60" text-anchor="middle" fill="#8b5e3c" font-size="9">C</text>
+              <text x="235" y="60" fill="#e74c3c" font-size="9">← 此处失配！</text>
+              <!-- KMP insight -->
+              <text x="8" y="85" fill="#c0392b" font-size="9">KMP:</text>
+              <text x="50" y="85" fill="#c0392b" font-size="9">已匹配的"ABAB"中，最长相等前后缀="AB"（长度2），所以模式串右移 4-2=2 位</text>
+              <!-- Alignment 2 -->
+              <text x="8" y="108" fill="#8b5e3c" font-size="9">跳后:</text>
+              <rect x="48" y="98" width="28" height="18" rx="3" fill="#e8d5c8" opacity="0.3"/><text x="62" y="110" text-anchor="middle" fill="#e8d5c8" font-size="9">A</text>
+              <rect x="78" y="98" width="28" height="18" rx="3" fill="#e8d5c8" opacity="0.3"/><text x="92" y="110" text-anchor="middle" fill="#e8d5c8" font-size="9">B</text>
+              <rect x="108" y="98" width="28" height="18" rx="3" fill="#27ae60"/><text x="122" y="110" text-anchor="middle" fill="#fff" font-size="9">A</text>
+              <rect x="138" y="98" width="28" height="18" rx="3" fill="#27ae60"/><text x="152" y="110" text-anchor="middle" fill="#fff" font-size="9">B</text>
+              <rect x="168" y="98" width="28" height="18" rx="3" fill="#27ae60"/><text x="182" y="110" text-anchor="middle" fill="#fff" font-size="9">A</text>
+              <rect x="198" y="98" width="28" height="18" rx="3" fill="#27ae60"/><text x="212" y="110" text-anchor="middle" fill="#fff" font-size="9">B</text>
+              <rect x="228" y="98" width="28" height="18" rx="3" fill="#27ae60"/><text x="242" y="110" text-anchor="middle" fill="#fff" font-size="9">C</text>
+              <text x="270" y="110" fill="#27ae60" font-size="9">← 匹配成功！</text>
+              <text x="310" y="135" text-anchor="middle" fill="#c0392b" font-size="11">next 数组含义：next[i] = P[0..i] 的最长相等前后缀长度</text>
+              <text x="310" y="155" text-anchor="middle" fill="#8b5e3c" font-size="10">P="ABABC": next=[0,0,1,2,0]（A=0, AB=0, ABA=1, ABAB=2, ABABC=0）</text>
+              <text x="310" y="178" text-anchor="middle" fill="#8b5e3c" font-size="10">KMP 复杂度：O(n+m)，比暴力 O(n*m) 快得多</text>
+            </svg>
+        </div>
+        <div style="background:var(--code-bg);border-radius:10px;padding:18px;margin-bottom:12px;">
+          <p style="color:var(--text);font-weight:700;margin-bottom:10px;">✍️ 手把手做题</p>
+          <p style="color:var(--text-secondary);margin-bottom:8px;"><strong>场景：</strong>在文本 T（长度 n）中查找模式串 P（长度 m）的所有出现位置。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>暴力法：</strong>每个位置尝试匹配 → O(n*m)，最坏 n=10⁶,m=10⁶ → 10¹² 次操作。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>KMP 核心：</strong>① <strong>预处理 next 数组</strong>：next[i] = P[0..i] 的最长<strong>相等前后缀</strong>长度（前缀≠整个串）。② <strong>匹配过程</strong>：两个指针 i(T)和 j(P)。若 T[i]==P[j] → i++,j++；若失配且 j&gt;0 → <strong>j=next[j-1]</strong>（利用已知信息跳过）；若失配且 j==0 → i++。</p>
+              <p style="color:var(--text-secondary);line-height:1.9;"><strong>字符串哈希（Rabin-Karp）：</strong>把字符串映射成整数（哈希值），O(1) 比较。滚动哈希：hash = (hash * base + s[i]) % mod。用于快速判重、最长回文子串等。</p>
+              <p style="color:var(--text-secondary);margin-top:8px;">💡 <strong>算法选择：</strong>单模式匹配→KMP O(n+m)；多模式匹配→AC 自动机；子串判重→字符串哈希。</p>
+        </div>
+        <div class="collapsible">
+          <button class="collapsible-trigger" onclick="toggleCollapse(this)">⚠️ 常见错误与避坑指南 <span class="arrow">▼</span></button>
+          <div class="collapsible-content">
+            <div style="padding:14px;color:var(--text-secondary);line-height:2;">
+              <p>❌ <strong>错误1：next 数组定义混乱</strong> → 不同教材 next 定义不同（有的存长度，有的存跳转位置）。<br>→ ✅ 理解本质：next[i] = P[0..i] 最长相等前后缀长度，失配时 j=next[j-1]。</p>
+              <p>❌ <strong>错误2：字符串哈希只用一种模数</strong> → 可能被卡掉（哈希碰撞）。<br>→ ✅ 双哈希：用两个不同的 base 和 mod 同时计算，都相等才认为字符串相等。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<h4 style="margin:20px 0 12px;color:var(--text-heading);">📝 经典例题</h4>
       <div class="problems-grid">
                 <a class="problem-card" href="https://www.luogu.com.cn/problem/P3370" target="_blank" rel="noopener">
                   <span class="source source-luogu">洛谷</span>
