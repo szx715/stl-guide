@@ -591,6 +591,68 @@ body {
   .info-grid { grid-template-columns: 1fr; }
 }
 
+/* ===== 学习笔记面板 ===== */
+.notes-collapsible { margin: 20px 0 8px; }
+.notes-collapsible .collapsible-trigger {
+  border: 1px dashed var(--accent2);
+  border-left: 4px solid var(--accent2);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.95rem; color: var(--accent2);
+  transition: all var(--transition);
+}
+.notes-collapsible .collapsible-trigger:hover {
+  border-color: var(--accent2); background: var(--bg-card-hover);
+  border-left-width: 6px;
+}
+.notes-indicator {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent2); margin-left: 6px;
+  opacity: 0; transform: scale(0);
+  transition: opacity var(--transition), transform var(--transition);
+  vertical-align: middle;
+}
+.notes-indicator.visible { opacity: 1; transform: scale(1); }
+.notes-textarea {
+  width: 100%; min-height: 120px; max-height: 500px;
+  padding: 14px 16px; border-radius: calc(var(--radius) - 2px);
+  border: 1px solid var(--border); background: var(--bg);
+  color: var(--text); font-family: inherit; font-size: 0.9rem;
+  line-height: 1.7; resize: vertical; outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.notes-textarea:focus {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(184,134,11,0.12);
+}
+.notes-textarea::placeholder { color: var(--text-secondary); opacity: 0.55; }
+.notes-actions {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 12px;
+}
+.notes-save-btn {
+  padding: 8px 20px; border-radius: 24px; border: none;
+  background: var(--gradient-3); color: #fff;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  transition: all var(--transition);
+}
+.notes-save-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(184,134,11,0.35);
+}
+.notes-clear-btn {
+  padding: 8px 18px; border-radius: 24px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-secondary); font-size: 0.85rem;
+  font-weight: 600; cursor: pointer; transition: all var(--transition);
+}
+.notes-clear-btn:hover { border-color: var(--accent); color: var(--accent); }
+.notes-status {
+  font-size: 0.8rem; color: var(--accent2);
+  opacity: 0; transition: opacity 0.3s;
+}
+.notes-status.visible { opacity: 1; }
+.notes-time { font-size: 0.75rem; color: var(--text-secondary); margin-left: auto; }
+
 </style>
 </head>
 <body>
@@ -746,6 +808,20 @@ ll mergeSort(vector<int>&a,int l,int r){
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-sort"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-sort" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('sort')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('sort')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('sort')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-sort"></span>
+            <span class="notes-time" id="notes-time-sort"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -820,6 +896,20 @@ while(l<r){
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-binsearch"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-binsearch" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('binsearch')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('binsearch')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('binsearch')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-binsearch"></span>
+            <span class="notes-time" id="notes-time-binsearch"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -892,6 +982,20 @@ for(int i=1;i<n;i++)diff[i]+=diff[i-1]; // 前缀和还原</pre>
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-prefix"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-prefix" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('prefix')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('prefix')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('prefix')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-prefix"></span>
+            <span class="notes-time" id="notes-time-prefix"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -963,6 +1067,20 @@ while(l<r){
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-twoptr"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-twoptr" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('twoptr')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('twoptr')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('twoptr')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-twoptr"></span>
+            <span class="notes-time" id="notes-time-twoptr"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1034,6 +1152,20 @@ for(int i=2;i<=n;i++){
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-math"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-math" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('math')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('math')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('math')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-math"></span>
+            <span class="notes-time" id="notes-time-math"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1101,6 +1233,20 @@ while(pq.size()>1){
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-greedy"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-greedy" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('greedy')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('greedy')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('greedy')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-greedy"></span>
+            <span class="notes-time" id="notes-time-greedy"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1182,6 +1328,20 @@ while(!q.empty()){
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-search"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-search" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('search')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('search')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('search')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-search"></span>
+            <span class="notes-time" id="notes-time-search"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1255,6 +1415,20 @@ for(int i=1;i<=n;i++)for(int j=1;j<=m;j++)
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-dp"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-dp" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('dp')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('dp')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('dp')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-dp"></span>
+            <span class="notes-time" id="notes-time-dp"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1327,6 +1501,20 @@ for(int i=0;i<n;i++){int k=cnt[i];
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-knapsack"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-knapsack" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('knapsack')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('knapsack')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('knapsack')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-knapsack"></span>
+            <span class="notes-time" id="notes-time-knapsack"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1396,6 +1584,20 @@ for(int i=0;i<n;i++){int k=cnt[i];
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-dsu"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-dsu" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('dsu')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('dsu')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('dsu')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-dsu"></span>
+            <span class="notes-time" id="notes-time-dsu"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1468,6 +1670,20 @@ for(int k=1;k<=n;k++)
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-sp"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-sp" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('sp')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('sp')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('sp')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-sp"></span>
+            <span class="notes-time" id="notes-time-sp"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <!-- ============================================================ -->
@@ -1546,6 +1762,20 @@ vector<int>kmp(string&s,string&p){
                   <span class="link-icon">↗</span>
                 </a>
       </div>
+    
+      <div class="collapsible notes-collapsible">
+        <button class="collapsible-trigger" onclick="toggleNotes(this)"><span>📝 学习笔记</span><span class="notes-indicator" id="indicator-string"></span><span class="arrow">▼</span></button>
+        <div class="collapsible-content">
+          <textarea class="notes-textarea" id="notes-string" placeholder="在这里记录你的学习心得、易错点、解题思路...&#10;&#10;💡 提示：Ctrl+S 快速保存" oninput="autoSaveNotes('string')"></textarea>
+          <div class="notes-actions">
+            <button class="notes-save-btn" onclick="saveNotes('string')">💾 保存笔记</button>
+            <button class="notes-clear-btn" onclick="clearNotes('string')">🗑️ 清除</button>
+            <span class="notes-status" id="notes-status-string"></span>
+            <span class="notes-time" id="notes-time-string"></span>
+          </div>
+        </div>
+      </div>
+
     </section>
 
 <footer class="footer">
@@ -1606,6 +1836,86 @@ function toggleCollapse(btn) {
   btn.classList.toggle('open');
   btn.nextElementSibling.classList.toggle('open');
 }
+
+// ===== 学习笔记系统 =====
+var NOTES_PREFIX = 'algo-notes-';
+var _notesTimers = {};
+
+function toggleNotes(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+  var ta = btn.nextElementSibling.querySelector('.notes-textarea');
+  if (ta && !ta._init) { loadNotes(ta.id.replace('notes-','')); ta._init = true; }
+}
+
+function loadNotes(sid) {
+  var raw = localStorage.getItem(NOTES_PREFIX + sid);
+  var ta = document.getElementById('notes-' + sid);
+  var te = document.getElementById('notes-time-' + sid);
+  if (!ta) return;
+  if (raw) {
+    try { var d = JSON.parse(raw); ta.value = d.text || ''; if (te && d.timestamp) te.textContent = '上次保存: ' + new Date(d.timestamp).toLocaleString('zh-CN'); }
+    catch(e) { ta.value = ''; }
+  }
+}
+
+function saveNotes(sid) {
+  var ta = document.getElementById('notes-' + sid);
+  var se = document.getElementById('notes-status-' + sid);
+  var te = document.getElementById('notes-time-' + sid);
+  if (!ta) return;
+  var now = new Date().toISOString();
+  try {
+    localStorage.setItem(NOTES_PREFIX + sid, JSON.stringify({text: ta.value, timestamp: now}));
+    if (se) { se.textContent = '✓ 已保存'; se.classList.add('visible'); setTimeout(function(){ se.classList.remove('visible'); }, 2000); }
+    if (te) te.textContent = '上次保存: ' + new Date(now).toLocaleString('zh-CN');
+    updateNoteIndicator(sid, ta.value.length > 0);
+  } catch(e) {
+    showToast(e.name === 'QuotaExceededError' ? '存储空间不足！请清理部分笔记。' : '保存失败');
+  }
+}
+
+function clearNotes(sid) {
+  if (!confirm('确定要清除这条学习笔记吗？此操作不可撤销。')) return;
+  localStorage.removeItem(NOTES_PREFIX + sid);
+  var ta = document.getElementById('notes-' + sid);
+  var te = document.getElementById('notes-time-' + sid);
+  if (ta) ta.value = '';
+  if (te) te.textContent = '';
+  updateNoteIndicator(sid, false);
+  showToast('🗑️ 笔记已清除');
+}
+
+function autoSaveNotes(sid) {
+  if (_notesTimers[sid]) clearTimeout(_notesTimers[sid]);
+  _notesTimers[sid] = setTimeout(function(){ saveNotes(sid); }, 2000);
+}
+
+function updateNoteIndicator(sid, show) {
+  var el = document.getElementById('indicator-' + sid);
+  if (el) { if (show) el.classList.add('visible'); else el.classList.remove('visible'); }
+}
+
+function loadAllNoteIndicators() {
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (k && k.indexOf(NOTES_PREFIX) === 0) {
+      try { var d = JSON.parse(localStorage.getItem(k)); if (d && d.text && d.text.trim()) updateNoteIndicator(k.substring(NOTES_PREFIX.length), true); }
+      catch(e) {}
+    }
+  }
+}
+
+// Ctrl+S 快捷键保存
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    var el = document.activeElement;
+    if (el && el.classList.contains('notes-textarea')) {
+      e.preventDefault();
+      saveNotes(el.id.replace('notes-', ''));
+    }
+  }
+});
 
 // ===== Copy Code =====
 function copyCode(btn) {
@@ -1889,6 +2199,9 @@ document.querySelectorAll('.info-card, .problem-card, .tip-box, .collapsible').f
 
 // Init daily problem on page load
 pickDailyProblem();
+
+// Init notes indicators on page load
+loadAllNoteIndicators();
 
 </script>
 
