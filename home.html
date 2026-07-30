@@ -68,6 +68,11 @@ body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;backgroun
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes toastOut{from{opacity:1}to{opacity:0}}
 @media(max-width:900px){.gate-grid{grid-template-columns:1fr}.hero h1{font-size:2rem}}
 @media(max-width:640px){.hutao-mascot{display:none}}
+
+/* ===== Hu Tao Fire Transition Overlay ===== */
+#fireOverlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;pointer-events:all;transition:opacity .7s ease}
+#fireOverlay.fade-out{opacity:0;pointer-events:none}
+#fireCanvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block}
 </style>
 </head>
 <body>
@@ -179,6 +184,263 @@ document.querySelectorAll('.gate-card').forEach(c=>{c.addEventListener('mousemov
 (function(){const m=document.getElementById('hutaoMascot');if(!m)return;const l=['欢迎来到往生堂！🦋','选一个方向开始修炼吧～🔥','吃饱喝饱，一路走好！'];m.addEventListener('click',()=>{const t=document.createElement('div');t.className='toast';t.textContent=l[Math.floor(Math.random()*l.length)];document.getElementById('toastContainer').appendChild(t);setTimeout(()=>t.remove(),2200)})})();
 // Service Worker — PWA 离线支持
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
+</script>
+<script>
+// ============================================================
+// Hu Tao Fire Transition — 胡桃烈焰焚纸过渡动画
+// ============================================================
+(function(){
+  // PWA 桌面应用：每次打开都播放 | 浏览器：每个会话播放一次
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+  if (!isPWA && sessionStorage.getItem('ht_fire_shown')) return;
+  if (!isPWA) sessionStorage.setItem('ht_fire_shown', '1');
+
+  // ── 动态创建遮罩层 ──
+  const overlay = document.createElement('div');
+  overlay.id = 'fireOverlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:#0a0000;pointer-events:all;transition:opacity .7s ease';
+  const canvas = document.createElement('canvas');
+  canvas.id = 'fireCanvas';
+  canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;display:block';
+  overlay.appendChild(canvas);
+  document.body.prepend(overlay);
+
+  const ctx = canvas.getContext('2d');
+
+  // ── 尺寸 ──
+  let W, H, cx, cy, maxR;
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    cx = W / 2;
+    cy = H / 2;
+    maxR = Math.sqrt(W*W + H*H) / 2 + 60;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', () => setTimeout(resize, 100));
+
+  // 禁止滚动
+  const prevOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+
+  // ── 胡桃色盘 ──
+  const PALETTE = [
+    [139,   0,   0],
+    [192,  57,  43],
+    [224,  68,  68],
+    [232,  93,  58],
+    [255,  94,  58],
+    [212, 160,  23],
+    [255, 180,  50],
+    [255, 220, 100],
+  ];
+
+  // ── 粒子系统 ──
+  let particles = [];
+  const MAX_P = 220;
+
+  function spawn(radius, count, opts) {
+    const o = Object.assign({centerBoost:false, butterflyRate:0.08, sizeRange:[1.5,5.5], lifeRange:[0.5,1.6]}, opts||{});
+    for (let i = 0; i < count && particles.length < MAX_P; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const r = o.centerBoost ? Math.random() * (radius || 30) : (radius || 0) + (Math.random() - 0.5) * 50;
+      const x = cx + Math.cos(angle) * r;
+      const y = cy + Math.sin(angle) * r;
+      const clr = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      const size = o.sizeRange[0] + Math.random() * (o.sizeRange[1] - o.sizeRange[0]);
+      const life = o.lifeRange[0] + Math.random() * (o.lifeRange[1] - o.lifeRange[0]);
+      const speed = 0.4 + Math.random() * 3.5;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - Math.random() * 2.5,
+        color: clr, size, life, maxLife: life,
+        isButterfly: Math.random() < o.butterflyRate,
+        wp: Math.random() * Math.PI * 2,
+        alpha: 0.6 + Math.random() * 0.4,
+      });
+    }
+  }
+
+  // ── 火焰边缘变形 ──
+  function burnEdgeR(angle, baseR, t) {
+    return baseR
+      + Math.sin(angle *  7 + t * 0.004) * (18 + baseR * 0.018)
+      + Math.sin(angle * 13 - t * 0.006) * (12 + baseR * 0.012)
+      + Math.sin(angle * 21 + t * 0.009) * 8
+      + Math.sin(angle *  3 - t * 0.003) * (24 + baseR * 0.025)
+      + Math.cos(angle * 5.5 + t * 0.007) * 14;
+  }
+
+  function drawBurnPath(baseR, t, scale) {
+    const steps = 120;
+    ctx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const a = (i / steps) * Math.PI * 2;
+      const r = burnEdgeR(a, baseR, t) * (scale || 1);
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  }
+
+  // ── 蝴蝶粒子 ──
+  function drawButterfly(x, y, size, wa, clr, alpha) {
+    ctx.save();
+    ctx.translate(x, y);
+    const s = size / 6;
+    ctx.beginPath();
+    ctx.ellipse(-2.2*s, -0.4*s, 2.5*s, 2*s, -0.25 + wa * 0.4, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${clr[0]},${clr[1]},${clr[2]},${alpha})`;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(2.2*s, -0.4*s, 2.5*s, 2*s, 0.25 - wa * 0.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(-1.3*s, 1.8*s, 1.6*s, 1.2*s, 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(212,160,23,${alpha * 0.85})`;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(1.3*s, 1.8*s, 1.6*s, 1.2*s, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(0, 0.25*s, 0.5*s, 1.8*s, 0, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(150,70,40,${alpha})`;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // ── 主动画循环 ──
+  const TOTAL_MS = 2900;
+  const FADE_MS  = 600;
+  let burnR   = -20;
+  let startTs = null;
+
+  function tick(ts) {
+    if (!startTs) startTs = ts;
+    const elapsed = ts - startTs;
+
+    // 燃烧进度：先慢后快（模拟纸张燃烧加速）
+    const tRaw = Math.min(elapsed / TOTAL_MS, 1);
+    const a = 0.38, p = 2.2;
+    const progress = 1 / (1 + Math.pow((1 - tRaw) / (a * tRaw + 0.001), p));
+    burnR = Math.pow(progress, 0.75) * maxR;
+
+    // ── 清屏 ──
+    ctx.clearRect(0, 0, W, H);
+
+    // ── ① 暗色覆盖层 ──
+    ctx.fillStyle = '#0a0000';
+    ctx.fillRect(0, 0, W, H);
+
+    // ── ② 燃烧光晕 ──
+    if (burnR > 5 && elapsed < TOTAL_MS - FADE_MS) {
+      ctx.save();
+      drawBurnPath(burnR, elapsed, 1.0);
+      ctx.strokeStyle = 'rgba(255, 94, 58, 0.65)';
+      ctx.lineWidth   = 18;
+      ctx.shadowColor = 'rgba(255, 94, 58, 0.75)';
+      ctx.shadowBlur  = 35;
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(255, 180, 60, 0.55)';
+      ctx.lineWidth   = 8;
+      ctx.shadowColor = 'rgba(255, 160, 40, 0.6)';
+      ctx.shadowBlur  = 18;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ── ③ 挖出燃烧洞 ──
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    drawBurnPath(burnR, elapsed, 0.94);
+    ctx.fill();
+    ctx.restore();
+
+    // ── ④ 明亮内缘 ──
+    if (burnR > 10 && elapsed < TOTAL_MS - FADE_MS) {
+      ctx.save();
+      drawBurnPath(burnR, elapsed, 0.97);
+      ctx.strokeStyle = 'rgba(255, 220, 120, 0.85)';
+      ctx.lineWidth   = 3;
+      ctx.shadowColor = 'rgba(255, 220, 120, 0.9)';
+      ctx.shadowBlur  = 12;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // ── ⑤ 点火闪光 ──
+    if (elapsed < 500) {
+      const fa = 1 - elapsed / 500;
+      const fg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 80);
+      fg.addColorStop(0,   `rgba(255,240,200,${fa * 0.9})`);
+      fg.addColorStop(0.3, `rgba(255,180,80,${fa * 0.5})`);
+      fg.addColorStop(0.7, `rgba(224,68,68,${fa * 0.2})`);
+      fg.addColorStop(1,   'rgba(192,57,43,0)');
+      ctx.fillStyle = fg;
+      ctx.fillRect(cx - 80, cy - 80, 160, 160);
+    }
+
+    // ── ⑥ 生成粒子 ──
+    if (elapsed < TOTAL_MS - FADE_MS) {
+      const rate = elapsed < 300 ? 12 : elapsed < 1500 ? 18 : elapsed < 2300 ? 10 : 3;
+      spawn(burnR, rate, {
+        butterflyRate: elapsed < 400 ? 0.15 : 0.06,
+        sizeRange: elapsed < 300 ? [2, 7] : [1, 5],
+        lifeRange: [0.4, 1.5],
+      });
+      if (elapsed < 1200 && Math.random() < 0.6) {
+        spawn(burnR * 0.3, 2, {centerBoost:true, butterflyRate:0.7, sizeRange:[3,8], lifeRange:[0.8,2.0]});
+      }
+    }
+
+    // ── ⑦ 更新并绘制粒子 ──
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy -= 0.025;
+      p.vx *= 0.998;
+      p.life -= 1 / 60;
+      p.wp  += 0.035;
+
+      if (p.life <= 0 || p.x < -60 || p.x > W + 60 || p.y < -60 || p.y > H + 60) {
+        particles.splice(i, 1);
+        continue;
+      }
+
+      const alpha = (p.life / p.maxLife) * p.alpha;
+      if (p.isButterfly && p.size > 2.5) {
+        drawButterfly(p.x, p.y, p.size, p.wp, p.color, alpha);
+      } else {
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+        g.addColorStop(0,    `rgba(${p.color[0]},${p.color[1]},${p.color[2]},${alpha})`);
+        g.addColorStop(0.45, `rgba(${p.color[0]},${p.color[1]},${p.color[2]},${alpha * 0.55})`);
+        g.addColorStop(1,    `rgba(${p.color[0]},${p.color[1]},${p.color[2]},0)`);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+      }
+    }
+
+    // ── ⑧ 结束 ──
+    if (elapsed >= TOTAL_MS) {
+      overlay.classList.add('fade-out');
+      document.body.style.overflow = prevOverflow;
+      setTimeout(() => {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }, FADE_MS + 100);
+      return;
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+})();
 </script>
 </body>
 </html>
