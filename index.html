@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c0392b">
 <title>C++ STL 容器完全指南 — 算法竞赛必备</title>
 <style>
 /* ===== CSS Variables — Hu Tao Theme ===== */
@@ -2529,6 +2531,8 @@ document.querySelectorAll('.info-card, .problem-card, .tip-box, .collapsible').f
 
 // Init daily problem on page load
 pickDailyProblem();
+// Service Worker — PWA 离线支持
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
 </script>
 
 </body>

@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c0392b">
 <title>算法学习笔记 — 竞赛算法模板与例题</title>
 <style>
 
@@ -2202,7 +2204,8 @@ pickDailyProblem();
 
 // Init notes indicators on page load
 loadAllNoteIndicators();
-
+// Service Worker — PWA 离线支持
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
 </script>
 
 </body>

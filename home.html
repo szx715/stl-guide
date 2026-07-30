@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c0392b">
 <title>算法竞赛学习指南 — 往生堂出品</title>
 <style>
 :root{--bg:#fefaf5;--text:#2a1010;--text-secondary:#8b5e3c;--accent:#c0392b;--accent2:#b8860b;--border:rgba(192,57,43,0.12);--card-bg:#fff;--radius:16px;--transition:.35s cubic-bezier(.4,0,.2,1)}
@@ -175,6 +177,8 @@ if (gateSection) observer.observe(gateSection);
 
 document.querySelectorAll('.gate-card').forEach(c=>{c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`translateY(-6px) perspective(800px) rotateY(${x*5}deg) rotateX(${-y*5}deg)`});c.addEventListener('mouseleave',()=>{c.style.transform=''})});
 (function(){const m=document.getElementById('hutaoMascot');if(!m)return;const l=['欢迎来到往生堂！🦋','选一个方向开始修炼吧～🔥','吃饱喝饱，一路走好！'];m.addEventListener('click',()=>{const t=document.createElement('div');t.className='toast';t.textContent=l[Math.floor(Math.random()*l.length)];document.getElementById('toastContainer').appendChild(t);setTimeout(()=>t.remove(),2200)})})();
+// Service Worker — PWA 离线支持
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
 </script>
 </body>
 </html>
