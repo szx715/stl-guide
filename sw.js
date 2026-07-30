@@ -1,5 +1,5 @@
 // Service Worker — 离线缓存 STL 学习指南
-const CACHE_NAME = 'stl-guide-v1';
+const CACHE_NAME = 'stl-guide-v2';
 const FILES = [
   '/',
   '/home.html',
